@@ -8,7 +8,7 @@ with Ragel off of a tweaked version of the original .rl grammar files, whereas
 String#fast_xs internals are based on Ola Bini's code ported to C#.
 
 You can find the latest builds of ironruby-hpricot at the following URL:
-http://cloud.github.com/downloads/nrk/ironruby-hpricot/
+http://github.com/nrk/ironruby-hpricot/downloads
 
 Want to help or contribute? Drop me a mail to suppakilla@gmail.com
 
