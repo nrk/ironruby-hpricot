@@ -1,0 +1,1 @@
+..\..\..\..\..\Main\bin\Debug\ClassInitGenerator.exe ..\..\..\..\..\Main\bin\Debug\IronRuby.Libraries.Hpricot.dll -libraries:IronRuby.Libraries.Hpricot -out:Initializers.Generated.cs
