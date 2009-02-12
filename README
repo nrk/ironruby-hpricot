@@ -7,6 +7,9 @@ This is a port for IronRuby of Hpricot's parser created by generating C# code
 with Ragel off of a tweaked version of the original .rl grammar files, whereas 
 String#fast_xs internals are based on Ola Bini's code ported to C#.
 
+You can find the latest builds of ironruby-hpricot at the following URL:
+http://cloud.github.com/downloads/nrk/ironruby-hpricot/
+
 Want to help or contribute? Drop me a mail to suppakilla@gmail.com
 
 NOTE: this is still a work in progress, see the TODO for more information.
