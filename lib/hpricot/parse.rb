@@ -278,7 +278,12 @@ module Hpricot
   end
 
   def ProcIns.parse(raw_string)
-    _, target, content = *raw_string.match(/\A<\?(\S+)\s+(.+)/m)
+    # _, target, content = *raw_string.match(/\A<\?(\S+)\s+(.+)/m)
+
+    # TODO: temporary workaround, needed until the bug #22518 (http://is.gd/jhaf) is fixed in IronRuby
+    matchData = raw_string.match(/\A<\?(\S+)\s+(.+)/m)
+    _, target, content = matchData.to_a
+
     result = ProcIns.new(target, content)
     result
   end
