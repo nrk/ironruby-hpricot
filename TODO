@@ -5,6 +5,8 @@
  * If @buffer_size is defined, its value should be used as the buffer size for 
    IO#read operations overriding the default buffer size.
 
+ * HpricotScanner.rl is still missing
+
  * README needs to be populated with notes and building instructions. The code 
    needs the right dose of comments.
 
