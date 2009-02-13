@@ -5,7 +5,10 @@
  * If @buffer_size is defined, its value should be used as the buffer size for 
    IO#read operations overriding the default buffer size.
 
- * HpricotScanner.rl is still missing
+ * HpricotScanner.rl is still missing: I think I'll give an higher priority to 
+   this task to be able to easily test the generation of HpricotScanner.cs by 
+   passing -F1 and -G1 flags to Ragel, just to see which one is the best 
+   speed and memory wise.
 
  * README needs to be populated with notes and building instructions. The code 
    needs the right dose of comments.
