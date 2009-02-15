@@ -19,7 +19,6 @@ namespace IronRuby.Libraries.Hpricot {
 
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
-        private Object rb_eHpricotParseError = null;
 
         #endregion
 
@@ -965,10 +964,6 @@ namespace IronRuby.Libraries.Hpricot {
             return MutableString.Create(s);
         }
 
-        private static void rb_raise(Object exception, String message) {
-            throw new Hpricot.ParseError(message);
-        }
-
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
             if (sym_text.Equals(sym)) {
                 raw = tag;
@@ -1455,7 +1450,7 @@ namespace IronRuby.Libraries.Hpricot {
                     else {
                         exceptionMessage = String.Format("parse error on line {0}.\n{1}", curline, NO_WAY_SERIOUSLY);
                     }
-                    rb_raise(rb_eHpricotParseError, exceptionMessage);
+                    throw new Hpricot.ParserException(exceptionMessage);
                 }
 
                 if (done && ele_open) {
