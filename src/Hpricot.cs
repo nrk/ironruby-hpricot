@@ -16,6 +16,18 @@ namespace IronRuby.Libraries.Hpricot {
             return new HpricotScanner().Scan(context, block, source);
         }
 
+        [RubyMethod("buffer_size", RubyMethodAttributes.PublicSingleton)]
+        public static Int32? GetBufferSize(RubyModule/*!*/ self) {
+            return HpricotScanner.BufferSize;
+        }
+
+        [RubyMethod("buffer_size=", RubyMethodAttributes.PublicSingleton)]
+        public static void SetBufferSize(RubyModule/*!*/ self, Int32 bufferSize) {
+            // TODO: thread safety
+            HpricotScanner.BufferSize = bufferSize;
+        }
+
+
         [RubyClass("ParseError")]
         public class ParseError : SystemException {
             public ParseError(String message) :

@@ -13,6 +13,14 @@ namespace IronRuby.Libraries.Hpricot {
         }
         
         private static void LoadHpricot_Class(IronRuby.Builtins.RubyModule/*!*/ module) {
+            module.DefineLibraryMethod("buffer_size", 0x21, 
+                new System.Func<IronRuby.Builtins.RubyModule, System.Nullable<System.Int32>>(IronRuby.Libraries.Hpricot.Hpricot.GetBufferSize)
+            );
+            
+            module.DefineLibraryMethod("buffer_size=", 0x21, 
+                new System.Action<IronRuby.Builtins.RubyModule, System.Int32>(IronRuby.Libraries.Hpricot.Hpricot.SetBufferSize)
+            );
+            
             module.DefineLibraryMethod("scan", 0x21, 
                 new System.Func<IronRuby.Runtime.RubyContext, IronRuby.Runtime.BlockParam, IronRuby.Builtins.RubyModule, System.Object, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.Scan)
             );

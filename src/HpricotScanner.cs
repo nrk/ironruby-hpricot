@@ -15,6 +15,8 @@ namespace IronRuby.Libraries.Hpricot {
 
         private static String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
 
+        private static Int32? _bufferSize;
+
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
         private Object rb_eHpricotParseError = null;
@@ -37,7 +39,7 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region fields - used by the ragel-generated code
 
-        private const int BUFSIZE = 32768;
+        private const int DEFAULT_BUFFER_SIZE = 32768;
 
         int cs, act, have = 0, nread = 0, curline = 1, p = -1;
         bool text = false;
@@ -1123,6 +1125,11 @@ namespace IronRuby.Libraries.Hpricot {
         #endregion
 
 
+        public static Int32? BufferSize {
+            get { return _bufferSize; }
+            set { _bufferSize = value; }
+        }
+        
         public Object Scan(RubyContext/*!*/ context, BlockParam/*!*/ block, Object/*!*/ source) {
             _currentContext = context;
             _blockParam = block;
@@ -1149,8 +1156,7 @@ namespace IronRuby.Libraries.Hpricot {
                 throw RubyExceptions.CreateArgumentError("bad Hpricot argument, String or IO only please.");
             }
 
-            // TODO: need to read the buffer size from @buffer_size if defined
-            buffer_size = BUFSIZE;
+            buffer_size = BufferSize.HasValue ? BufferSize.Value : DEFAULT_BUFFER_SIZE;
             buf = new char[buffer_size];
 
             {
@@ -1166,7 +1172,7 @@ namespace IronRuby.Libraries.Hpricot {
                 int space = buffer_size - have;
 
                 if (space == 0) {
-                    buffer_size += BUFSIZE;
+                    buffer_size += DEFAULT_BUFFER_SIZE;
                     Array.Resize<char>(ref buf, buffer_size);
                     space = buffer_size - have;
                 }
