@@ -14,7 +14,7 @@ namespace IronRuby.Libraries.Hpricot {
         
         private static void LoadHpricot_Class(IronRuby.Builtins.RubyModule/*!*/ module) {
             module.DefineLibraryMethod("scan", 0x21, 
-                new System.Func<IronRuby.Runtime.RespondToStorage, IronRuby.Runtime.RubyContext, IronRuby.Runtime.BlockParam, IronRuby.Builtins.RubyModule, System.Object, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.Scan)
+                new System.Func<IronRuby.Runtime.RubyContext, IronRuby.Runtime.BlockParam, IronRuby.Builtins.RubyModule, System.Object, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.Scan)
             );
             
         }

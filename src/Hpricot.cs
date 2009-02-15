@@ -9,7 +9,7 @@ namespace IronRuby.Libraries.Hpricot {
     [RubyModule("Hpricot")]
     public static class Hpricot {
         [RubyMethod("scan", RubyMethodAttributes.PublicSingleton)]
-        public static Object Scan(RespondToStorage/*!*/ respondToStorage, RubyContext/*!*/ context, BlockParam/*!*/ block, RubyModule/*!*/ self, Object/*!*/ source) {
+        public static Object Scan(RubyContext/*!*/ context, BlockParam/*!*/ block, RubyModule/*!*/ self, Object/*!*/ source) {
             if (block == null) {
                 throw RubyExceptions.NoBlockGiven();
             }
