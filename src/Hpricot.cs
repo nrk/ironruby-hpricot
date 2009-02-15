@@ -18,10 +18,6 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("ParseError")]
         public class ParseError : SystemException {
-            public ParseError() :
-                base() {
-            }
-
             public ParseError(String message) :
                 base(message) {
             }
