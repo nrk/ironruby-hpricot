@@ -9,11 +9,13 @@ namespace IronRuby.Libraries.Hpricot {
     [RubyModule("Hpricot")]
     public static class Hpricot {
         [RubyMethod("scan", RubyMethodAttributes.PublicSingleton)]
-        public static Object Scan(RubyContext/*!*/ context, BlockParam/*!*/ block, RubyModule/*!*/ self, Object/*!*/ source) {
+        public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 
+            RubyContext/*!*/ context, BlockParam/*!*/ block, RubyModule/*!*/ self, Object/*!*/ source) {
             if (block == null) {
                 throw RubyExceptions.NoBlockGiven();
             }
-            return new HpricotScanner().Scan(context, block, source);
+            HpricotScanner scanner = new HpricotScanner(respondsTo, toMutableStringStorage, context, block);
+            return scanner.Scan(source);
         }
 
         [RubyMethod("buffer_size", RubyMethodAttributes.PublicSingleton)]

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
+using IronRuby.Runtime.Calls;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
@@ -19,6 +20,8 @@ namespace IronRuby.Libraries.Hpricot {
 
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
+        private RespondToStorage/*!*/ _respondToStorage;
+        private ConversionStorage<MutableString> _toMutableString;
 
         #endregion
 
@@ -51,6 +54,19 @@ namespace IronRuby.Libraries.Hpricot {
         bool done = false, ele_open = false;
         int buffer_size = 0;
         bool taint = false;
+
+        #endregion
+
+
+        #region constructors 
+
+        public HpricotScanner(RespondToStorage/*!*/ respondToStorage, ConversionStorage<MutableString>/*!*/ toMutableString, 
+            RubyContext/*!*/ context, BlockParam/*!*/ block) {
+            _respondToStorage = respondToStorage;
+            _toMutableString = toMutableString;
+            _currentContext = context;
+            _blockParam = block;
+        }
 
         #endregion
 
@@ -1124,28 +1140,22 @@ namespace IronRuby.Libraries.Hpricot {
             get { return _bufferSize; }
             set { _bufferSize = value; }
         }
-        
-        public Object Scan(RubyContext/*!*/ context, BlockParam/*!*/ block, Object/*!*/ source) {
-            _currentContext = context;
-            _blockParam = block;
-            return DoScan(source);
-        }
 
-        private Object DoScan(Object/*!*/ source) {
+        public Object Scan(Object/*!*/ source) {
             tag = new Object[1];
             akey = new Object[1];
             aval = new Object[1];
 
             taint = _currentContext.IsObjectTainted(source);
 
-            bool sourceRespondsToRead = RubySites.RespondTo(_currentContext, source, "read");
+            bool sourceRespondsToRead = Protocols.RespondTo(_respondToStorage, _currentContext, source, "read");
 
             RubyIOReadCallSite readCallSite = null;
             if (sourceRespondsToRead) {
-                readCallSite = RubyIOReadCallSite.Create(RubySites.InstanceCallAction("read", 3));
+                readCallSite = RubyIOReadCallSite.Create(RubyCallAction.Make("read", 3));
             }
-            else if (RubySites.RespondTo(_currentContext, source, "to_str")) {
-                source = Protocols.CastToString(_currentContext, source);
+            else if (Protocols.RespondTo(_respondToStorage, _currentContext, source, "to_str")) {
+                source = Protocols.CastToString(_toMutableString, _currentContext, source);
             }
             else {
                 throw RubyExceptions.CreateArgumentError("bad Hpricot argument, String or IO only please.");
