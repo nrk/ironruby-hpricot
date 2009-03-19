@@ -1189,7 +1189,7 @@ namespace IronRuby.Libraries.Hpricot {
                 else {
                     MutableString str = source as MutableString;
                     int end = Math.Min(str.Length, nread + space);
-                    chars = str.Encoding.GetChars(str.GetBinarySlice(nread, end - nread));
+                    chars = str.Encoding.Encoding.GetChars(str.GetBinarySlice(nread, end - nread));
                 }
 
                 Array.Copy(chars, 0, buf, p, chars.Length);
