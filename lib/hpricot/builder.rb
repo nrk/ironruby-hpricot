@@ -1,20 +1,13 @@
 require 'hpricot/tags'
 #require 'fast_xs'
 require 'hpricot/blankslate'
+require 'hpricot/htmlinfo'
 
 module Hpricot
-  PREDEFINED = {
-    34 => '&quot;', # quotation mark
-    38 => '&amp;',  # ampersand
-    60 => '&lt;',   # left angle bracket
-    62 => '&gt;'    # right angle bracket
-  }
-  PREDEFINED_U = PREDEFINED.inject({}) { |hsh, (k, v)| hsh[v] = k; hsh }
-
   # XML unescape
   def self.uxs(str)
     str.to_s.
-        gsub(/\&\w+;/) { |x| (PREDEFINED_U[x] || ??).chr }.
+        gsub(/\&(\w+);/) { [NamedCharacters[$1] || ??].pack("U*") }.
         gsub(/\&\#(\d+);/) { [$1.to_i].pack("U*") }
   end
 
@@ -23,7 +16,7 @@ module Hpricot
     assigns.each do |k, v|
       ele.instance_variable_set("@#{k}", v)
     end
-    ele.instance_eval &blk
+    ele.instance_eval(&blk)
     ele
   end
 
@@ -45,14 +38,21 @@ module Hpricot
       @@default[option] = value
     end
 
+    def add_child ele
+      ele.parent = self
+      self.children ||= []
+      self.children << ele
+      ele
+    end
+
     # Write a +string+ to the HTML stream, making sure to escape it.
     def text!(string)
-      @children << Text.new(string.fast_xs)
+      add_child Text.new(string.fast_xs)
     end
 
     # Write a +string+ to the HTML stream without escaping it.
     def text(string)
-      @children << Text.new(string)
+      add_child Text.new(string)
       nil
     end
     alias_method :<<, :text
@@ -67,11 +67,11 @@ module Hpricot
               raise InvalidXhtmlError, "no element `#{tag}' for #{tagset.doctype}"
           elsif args.last.respond_to?(:to_hash)
               attrs = args.last.to_hash
-              
+
               if @tagset.forms.include?(tag) and attrs[:id]
                 attrs[:name] ||= attrs[:id]
               end
-              
+
               attrs.each do |k, v|
                   atname = k.to_s.downcase.intern
                   unless k =~ /:/ or @tagset.tagset[tag].include? atname
@@ -105,14 +105,15 @@ module Hpricot
       end
 
       # create the element itself
-      f = Elem.new(STag.new(tag, attrs), childs, ETag.new(tag))
+      tag = tag.to_s
+      f = Elem.new(tag, attrs, childs, ETag.new(tag))
 
       # build children from the block
       if block
         build(f, &block)
       end
 
-      @children << f
+      add_child f
       f
     end
 
@@ -145,11 +146,11 @@ module Hpricot
     end
 
     def doctype(target, pub, sys)
-      @children << DocType.new(target, pub, sys)
+      add_child DocType.new(target, pub, sys)
     end
 
     remove_method :head
-    
+
     # Builds a head tag.  Adds a <tt>meta</tt> tag inside with Content-Type
     # set to <tt>text/html; charset=utf-8</tt>.
     def head(*args, &block)
@@ -193,7 +194,7 @@ module Hpricot
     def initialize(builder, sym)
       @builder, @sym, @attrs = builder, sym, {}
     end
-    
+
     # Adds attributes to an element.  Bang methods set the :id attribute.
     # Other methods add to the :class attribute.
     def method_missing(id_or_class, *args, &block)
@@ -207,7 +208,7 @@ module Hpricot
         args.push(@attrs)
         return @builder.tag!(@sym, *args, &block)
       end
-      
+
       return self
     end
 

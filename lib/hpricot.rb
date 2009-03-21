@@ -25,5 +25,3 @@ require 'hpricot/traverse'
 require 'hpricot/inspect'
 require 'hpricot/parse'
 require 'hpricot/builder'
-
-
