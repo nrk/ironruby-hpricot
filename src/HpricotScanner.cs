@@ -984,6 +984,11 @@ namespace IronRuby.Libraries.Hpricot {
             return MutableString.Create(s);
         }
 
+        private static Object rb_hash_lookup(Hash hash, Object key) {
+            Object value;
+            return hash.TryGetValue(key, out value) ? value : null;
+        }
+
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
             if (sym_text.Equals(sym)) {
                 raw = tag;
