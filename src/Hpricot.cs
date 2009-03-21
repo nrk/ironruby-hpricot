@@ -17,10 +17,9 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyMethod("scan", RubyMethodAttributes.PublicSingleton)]
         public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 
-            RubyContext/*!*/ context, BlockParam/*!*/ block, RubyModule/*!*/ self, Object/*!*/ source) {
-            if (block == null) {
-                throw RubyExceptions.NoBlockGiven();
-            }
+            RubyContext/*!*/ context, BlockParam block, RubyModule/*!*/ self, Object/*!*/ source) {
+
+            //NOTE: block can be null as of Hpricot 0.7, see HpricotScanner.ELE
             HpricotScanner scanner = new HpricotScanner(respondsTo, toMutableStringStorage, context, block);
             return scanner.Scan(source);
         }

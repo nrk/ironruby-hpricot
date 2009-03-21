@@ -25,6 +25,8 @@ namespace IronRuby.Libraries.Hpricot {
         private RespondToStorage/*!*/ _respondToStorage;
         private ConversionStorage<MutableString> _toMutableString;
 
+        private HpricotState _state;
+
         #endregion
 
         #region fields - hpricot symbols
@@ -65,7 +67,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region constructors 
 
         public HpricotScanner(RespondToStorage/*!*/ respondToStorage, ConversionStorage<MutableString>/*!*/ toMutableString, 
-            RubyContext/*!*/ context, BlockParam/*!*/ block) {
+            RubyContext/*!*/ context, BlockParam block) {
             _respondToStorage = respondToStorage;
             _toMutableString = toMutableString;
             _currentContext = context;
@@ -989,6 +991,10 @@ namespace IronRuby.Libraries.Hpricot {
             return hash.TryGetValue(key, out value) ? value : null;
         }
 
+        #endregion
+
+        #region methods for the parser logic
+
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
             if (sym_text.Equals(sym)) {
                 raw = tag;
@@ -1011,21 +1017,36 @@ namespace IronRuby.Libraries.Hpricot {
             _blockParam.Yield(ary, out result);
         }
 
+        private void rb_hpricot_token(HpricotState state, Object sym, Object tag, Object attr, int raw, int rawlen, bool taint) { 
+            // TODO: ...
+        }
+
         #endregion
 
         #region parser callbacks
 
         private void ELE(Object N) {
             if (te > ts || text) {
-                Object raw_string = null;
+                int raw = 0;
+                int rawlen = 0;
                 ele_open = false;
                 text = false;
 
                 if (ts != -1 && N != sym_cdata && N != sym_text && N != sym_procins && N != sym_comment) {
-                    raw_string = MutableString.Create(new String(buf, ts, te - ts));
+                    raw = ts;
+                    rawlen = te - ts;
                 }
 
-                rb_yield_tokens(N, tag[0], attr, raw_string, taint);
+                if (_blockParam != null) {
+                    MutableString raw_string = null;
+                    if (raw > 0) {
+                        raw_string = MutableString.Create(new String(buf, raw, rawlen));
+                    }
+                    rb_yield_tokens(N, tag[0], attr, raw_string, taint);
+                }
+                else {
+                    rb_hpricot_token(_state, N, tag[0], attr, raw, rawlen, taint);
+                }
             }
         }
 
