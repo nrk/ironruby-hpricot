@@ -9,9 +9,11 @@ namespace IronRuby.Libraries.Hpricot {
     [RubyModule("Hpricot")]
     public static class Hpricot {
         #region Hpricot
-        
+
+        // TODO: ProcInsParse seems to be actually unused in ruby code. I'll leave it here for now, 
+        //       but I think it is safe to remove it.
         [RubyConstant("ProcInsParse")]
-        public static readonly RubyRegex ProcInsParse = new RubyRegex("\\A<\\?(\\S+)\\s+(.+)", RubyRegexOptions.Multiline);
+        public static readonly RubyRegex ProcInsParse = HpricotScanner.ProcInsParse;
 
         [RubyMethod("scan", RubyMethodAttributes.PublicSingleton)]
         public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 

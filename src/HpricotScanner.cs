@@ -18,6 +18,8 @@ namespace IronRuby.Libraries.Hpricot {
 
         private static Int32? _bufferSize;
 
+        private static readonly RubyRegex _procInsParse = new RubyRegex("\\A<\\?(\\S+)\\s+(.+)", RubyRegexOptions.Multiline);
+
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
         private RespondToStorage/*!*/ _respondToStorage;
@@ -1142,6 +1144,11 @@ namespace IronRuby.Libraries.Hpricot {
             get { return _bufferSize; }
             set { _bufferSize = value; }
         }
+
+        public static RubyRegex ProcInsParse {
+            get { return _procInsParse; }
+        }
+
 
         public Object Scan(Object/*!*/ source) {
             tag = new Object[1];
