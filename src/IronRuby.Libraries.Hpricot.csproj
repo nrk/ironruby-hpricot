@@ -3,9 +3,9 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E4E15B17-330F-4C96-A937-46D74ADCE4AC}</ProjectGuid>
+    <ProjectGuid>{26AA0639-87CD-47F2-95C3-83F851464531}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronRuby.Libraries.Hpricot</RootNamespace>
@@ -39,6 +39,7 @@
     <Compile Include="BuiltinsOps.cs" />
     <Compile Include="FastXs.cs" />
     <Compile Include="Hpricot.cs" />
+    <Compile Include="HpricotObjects.cs" />
     <Compile Include="HpricotScanner.cs" />
     <Compile Include="Initializers.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +61,10 @@
       <Project>{7F6984B4-EE6D-4E6F-ABB1-E210D7DC4FDD}</Project>
       <Name>Ruby</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ragel\HpricotScanner.common.rl" />
+    <None Include="Ragel\HpricotScanner.rl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
