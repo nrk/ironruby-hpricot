@@ -27,15 +27,17 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region fields - hpricot symbols
 
-        private static Object xmldecl = SymbolTable.StringToId("xmldecl");
-        private static Object doctype = SymbolTable.StringToId("doctype");
-        private static Object procins = SymbolTable.StringToId("procins");
-        private static Object stag = SymbolTable.StringToId("stag");
-        private static Object etag = SymbolTable.StringToId("etag");
-        private static Object emptytag = SymbolTable.StringToId("emptytag");
-        private static Object comment = SymbolTable.StringToId("comment");
-        private static Object cdata = SymbolTable.StringToId("cdata");
+        private static Object sym_xmldecl = SymbolTable.StringToId("xmldecl");
+        private static Object sym_doctype = SymbolTable.StringToId("doctype");
+        private static Object sym_procins = SymbolTable.StringToId("procins");
+        private static Object sym_stag = SymbolTable.StringToId("stag");
+        private static Object sym_etag = SymbolTable.StringToId("etag");
+        private static Object sym_emptytag = SymbolTable.StringToId("emptytag");
+        private static Object sym_comment = SymbolTable.StringToId("comment");
+        private static Object sym_cdata = SymbolTable.StringToId("cdata");
         private static Object sym_text = SymbolTable.StringToId("text");
+        private static Object sym_EMPTY = SymbolTable.StringToId("EMPTY");
+        private static Object sym_CDATA = SymbolTable.StringToId("CDATA");
 
         #endregion
 
@@ -1012,7 +1014,7 @@ namespace IronRuby.Libraries.Hpricot {
                 ele_open = false;
                 text = false;
 
-                if (ts != -1 && N != cdata && N != sym_text && N != procins && N != comment) {
+                if (ts != -1 && N != sym_cdata && N != sym_text && N != sym_procins && N != sym_comment) {
                     raw_string = MutableString.Create(new String(buf, ts, te - ts));
                 }
 
@@ -1342,11 +1344,11 @@ namespace IronRuby.Libraries.Hpricot {
                                 break;
                             case 16: { TEXT_PASS(); }
                                 break;
-                            case 17: { EBLK(comment, 3); { cs = 204; if (true) goto _again; } }
+                            case 17: { EBLK(sym_comment, 3); { cs = 204; if (true) goto _again; } }
                                 break;
-                            case 18: { EBLK(cdata, 3); { cs = 204; if (true) goto _again; } }
+                            case 18: { EBLK(sym_cdata, 3); { cs = 204; if (true) goto _again; } }
                                 break;
-                            case 19: { EBLK(procins, 2); { cs = 204; if (true) goto _again; } }
+                            case 19: { EBLK(sym_procins, 2); { cs = 204; if (true) goto _again; } }
                                 break;
                             case 22: { te = p + 1; }
                                 break;
@@ -1380,15 +1382,15 @@ namespace IronRuby.Libraries.Hpricot {
                                 break;
                             case 37: { act = 15; }
                                 break;
-                            case 38: { te = p + 1; { ELE(xmldecl); } }
+                            case 38: { te = p + 1; { ELE(sym_xmldecl); } }
                                 break;
-                            case 39: { te = p + 1; { ELE(doctype); } }
+                            case 39: { te = p + 1; { ELE(sym_doctype); } }
                                 break;
-                            case 40: { te = p + 1; { ELE(stag); } }
+                            case 40: { te = p + 1; { ELE(sym_stag); } }
                                 break;
-                            case 41: { te = p + 1; { ELE(etag); } }
+                            case 41: { te = p + 1; { ELE(sym_etag); } }
                                 break;
-                            case 42: { te = p + 1; { ELE(emptytag); } }
+                            case 42: { te = p + 1; { ELE(sym_emptytag); } }
                                 break;
                             case 43: { te = p + 1; { { cs = 214; if (true) goto _again; } } }
                                 break;
@@ -1396,7 +1398,7 @@ namespace IronRuby.Libraries.Hpricot {
                                 break;
                             case 45: { te = p + 1; { TEXT_PASS(); } }
                                 break;
-                            case 46: { te = p; p--; { ELE(doctype); } }
+                            case 46: { te = p; p--; { ELE(sym_doctype); } }
                                 break;
                             case 47: { te = p; p--; { { cs = 218; if (true) goto _again; } } }
                                 break;
@@ -1408,11 +1410,11 @@ namespace IronRuby.Libraries.Hpricot {
                                 break;
                             case 51: {
                                     switch (act) {
-                                        case 8: { { p = ((te)) - 1; } ELE(doctype); }
+                                        case 8: { { p = ((te)) - 1; } ELE(sym_doctype); }
                                             break;
-                                        case 10: { { p = ((te)) - 1; } ELE(stag); }
+                                        case 10: { { p = ((te)) - 1; } ELE(sym_stag); }
                                             break;
-                                        case 12: { { p = ((te)) - 1; } ELE(emptytag); }
+                                        case 12: { { p = ((te)) - 1; } ELE(sym_emptytag); }
                                             break;
                                         case 15: { { p = ((te)) - 1; } TEXT_PASS(); }
                                             break;
