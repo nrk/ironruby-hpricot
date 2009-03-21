@@ -42,18 +42,36 @@ namespace IronRuby.Libraries.Hpricot {
 
         #endregion
 
+
         #region Hpricot::Doc
 
         [RubyClass("Doc")]
-        public static class Doc {
+        public class Document {
+            private ElementData _data;
+
+            public Document() : this(new ElementData()) { }
+
+            public Document(ElementData data) {
+                _data = data;
+            }
+
+            internal ElementData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static Document Allocator(RubyClass/*!*/ self) {
+                return new Document();
+            }
+
             [RubyMethod("children")]
-            public static Object GetChildren(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetChildren(Document/*!*/ self) {
+                return self.Data.children;
             }
 
             [RubyMethod("children=")]
-            public static void SetChildren(RubyModule/*!*/ self, Object children) {
-                // ... 
+            public static void SetChildren(Document/*!*/ self, Object/*!*/ children) {
+                self.Data.children = children;
             }
         }
 
@@ -62,20 +80,37 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::BaseEle
 
         [RubyClass("BaseEle")]
-        public static class BaseEle {
+        public class BaseElement {
+            private BasicData _data;
+
+            public BaseElement() : this(new BasicData()) { }
+
+            public BaseElement(BasicData data) {
+                _data = data;
+            }
+
+            internal BasicData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static BaseElement Allocator(RubyClass/*!*/ self) {
+                return new BaseElement();
+            }
+
             [RubyMethod("raw_string")]
-            public static MutableString GetRawString(RubyModule/*!*/ self) {
-                return MutableString.Empty;
+            public static MutableString GetRawString(BaseElement/*!*/ self) {
+                return self.Data.tag as MutableString;
             }
 
             [RubyMethod("parent")]
-            public static Object GetParent(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetParent(BaseElement/*!*/ self) {
+                return self.Data.parent;
             }
 
             [RubyMethod("parent=")]
-            public static void SetParent(RubyModule/*!*/ self, Object parent) {
-                // ... 
+            public static void SetParent(BaseElement/*!*/ self, Object/*!*/ parent) {
+                self.Data.parent = parent;
             }
         }
 
@@ -83,16 +118,33 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region Hpricot::CData 
 
-        [RubyClass("CData", Inherits = typeof(BaseEle))]
-        public static class CData {
+        [RubyClass("CData", Inherits = typeof(BaseElement))]
+        public class CData {
+            private BasicData _data;
+
+            public CData() : this(new BasicData()) { }
+
+            public CData(BasicData data) {
+                _data = data;
+            }
+
+            internal BasicData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static CData Allocator(RubyClass/*!*/ self) {
+                return new CData();
+            }
+
             [RubyMethod("content")]
-            public static Object GetContent(RubyModule/*!*/ self) {
-                return null;
+            public static MutableString GetContent(CData/*!*/ self) {
+                return self.Data.tag as MutableString;
             }
 
             [RubyMethod("content=")]
-            public static void SetContent(RubyModule/*!*/ self, Object content) {
-                // ... 
+            public static void SetContent(CData/*!*/ self, Object/*!*/ content) {
+                self.Data.tag = content;
             }
         }
 
@@ -100,16 +152,33 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region Hpricot::Comment
 
-        [RubyClass("Comment", Inherits = typeof(BaseEle))]
-        public static class Comment {
+        [RubyClass("Comment", Inherits = typeof(BaseElement))]
+        public class Comment {
+            private BasicData _data;
+
+            public Comment() : this(new BasicData()) { }
+
+            public Comment(BasicData data) {
+                _data = data;
+            }
+
+            internal BasicData Data {
+                get { return _data; }
+            }
+            
+            [RubyConstructor]
+            public static Comment Allocator(RubyClass/*!*/ self) {
+                return new Comment();
+            }
+
             [RubyMethod("content")]
-            public static Object GetContent(RubyModule/*!*/ self) {
-                return null;
+            public static MutableString GetContent(Comment/*!*/ self) {
+                return self.Data.tag as MutableString;
             }
 
             [RubyMethod("content=")]
-            public static void SetContent(RubyModule/*!*/ self, Object content) {
-                // ... 
+            public static void SetContent(Comment/*!*/ self, Object/*!*/ content) {
+                self.Data.tag = content;
             }
         }
 
@@ -117,36 +186,53 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region Hpricot::DocType
 
-        [RubyClass("DocType", Inherits = typeof(BaseEle))]
-        public static class DocType {
+        [RubyClass("DocType", Inherits = typeof(BaseElement))]
+        public class DocumentType {
+            private AttributeData _data;
+
+            public DocumentType() : this(new AttributeData()) { }
+
+            public DocumentType(AttributeData data) {
+                _data = data;
+            }
+
+            internal AttributeData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static DocumentType Allocator(RubyClass/*!*/ self) {
+                return new DocumentType();
+            }
+
             [RubyMethod("target")]
-            public static Object GetTarget(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetTarget(DocumentType/*!*/ self) {
+                return self.Data.tag;
             }
 
             [RubyMethod("target=")]
-            public static void SetTarget(RubyModule/*!*/ self, Object target) {
-                // ... 
+            public static void SetTarget(DocumentType/*!*/ self, Object/*!*/ target) {
+                self.Data.tag = target;
             }
 
             [RubyMethod("public_id")]
-            public static Object GetPublicId(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetPublicId(DocumentType/*!*/ self) {
+                return (self.Data.attr as Hash)["public_id"];
             }
 
             [RubyMethod("public_id=")]
-            public static void SetPublicId(RubyModule/*!*/ self, Object publicId) {
-                // ... 
+            public static void SetPublicId(DocumentType/*!*/ self, Object/*!*/ publicId) {
+                (self.Data.attr as Hash)["public_id"] = publicId;
             }
 
             [RubyMethod("system_id")]
-            public static Object GetSystemId(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetSystemId(DocumentType/*!*/ self) {
+                return (self.Data.attr as Hash)["system_id"];
             }
 
             [RubyMethod("system_id=")]
-            public static void SetSystemId(RubyModule/*!*/ self, Object systemId) {
-                // ... 
+            public static void SetSystemId(DocumentType/*!*/ self, Object/*!*/ systemId) {
+                (self.Data.attr as Hash)["system_id"] = systemId;
             }
         }
 
@@ -154,56 +240,74 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region Hpricot::Elem
 
-        [RubyClass("Elem", Inherits = typeof(BaseEle))]
-        public static class Elem {
+        [RubyClass("Elem", Inherits = typeof(BaseElement))]
+        public class Element {
+            private ElementData _data;
+
+            public Element() : this(new ElementData()) { }
+
+            public Element(ElementData data) {
+                _data = data;
+            }
+
+            internal ElementData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static Element Allocator(RubyClass/*!*/ self) {
+                return new Element();
+            }
+
             [RubyMethod("raw_string")]
-            public static MutableString GetRawString(RubyModule/*!*/ self) {
-                return MutableString.Empty;
+            public static MutableString GetRawString(Element/*!*/ self) {
+                return self.Data.tag as MutableString;
             }
 
             [RubyMethod("clear_raw")]
-            public static MutableString GetClearRaw(RubyModule/*!*/ self) {
-                return MutableString.Empty;
+            public static bool ClearRaw(Element/*!*/ self) {
+                self.Data.tag = null;
+                return true;
             }
 
             [RubyMethod("raw_attributes")]
-            public static Object GetRawAttributes(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetRawAttributes(Element/*!*/ self) {
+                return self.Data.attr;
             }
 
             [RubyMethod("raw_attributes=")]
-            public static void SetRawAttributes(RubyModule/*!*/ self, Object rawAttributes) {
-                // ... 
+            public static void SetRawAttributes(Element/*!*/ self, Object/*!*/ rawAttributes) {
+                self.Data.attr = rawAttributes;
             }
 
             [RubyMethod("children")]
-            public static Object GetChildren(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetChildren(Element/*!*/ self) {
+                return self.Data.children;
             }
 
             [RubyMethod("children=")]
-            public static void SetChildren(RubyModule/*!*/ self, Object children) {
-                // ... 
+            public static void SetChildren(Element/*!*/ self, Object/*!*/ children) {
+                self.Data.children = children;
             }
 
             [RubyMethod("etag")]
-            public static Object GetEtag(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetEtag(Element/*!*/ self) {
+                return self.Data.etag;
             }
 
             [RubyMethod("etag=")]
-            public static void SetEtag(RubyModule/*!*/ self, Object etag) {
-                // ... 
+            public static void SetEtag(Element/*!*/ self, Object/*!*/ etag) {
+                self.Data.etag = etag;
             }
 
             [RubyMethod("name")]
-            public static Object GetName(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetName(Element/*!*/ self) {
+                return self.Data.tag;
             }
 
             [RubyMethod("name=")]
-            public static void SetName(RubyModule/*!*/ self, Object name) {
-                // ... 
+            public static void SetName(Element/*!*/ self, Object/*!*/ name) {
+                self.Data.tag = name;
             }
         }
 
@@ -211,26 +315,45 @@ namespace IronRuby.Libraries.Hpricot {
         
         #region Hpricot::ETag
 
-        [RubyClass("ETag", Inherits = typeof(BaseEle))]
-        public static class ETag {
+        [RubyClass("ETag", Inherits = typeof(BaseElement))]
+        public class ETag {
+            private AttributeData _data;
+
+            public ETag() : this(new AttributeData()) { }
+
+            public ETag(AttributeData data) {
+                _data = data;
+            }
+
+            internal AttributeData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static ETag Allocator(RubyClass/*!*/ self) {
+                return new ETag();
+            }
+
             [RubyMethod("raw_string")]
-            public static MutableString GetRawString(RubyModule/*!*/ self) {
-                return MutableString.Empty;
+            public static MutableString GetRawString(ETag/*!*/ self) {
+                // TODO: hmm, I'm not really sure of this...
+                return self.Data.attr as MutableString;
             }
 
             [RubyMethod("clear_raw")]
-            public static MutableString GetClearRaw(RubyModule/*!*/ self) {
-                return MutableString.Empty;
+            public static bool ClearRaw(ETag/*!*/ self) {
+                self.Data.attr = null;
+                return true;
             }
 
             [RubyMethod("name")]
-            public static Object GetName(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetName(ETag/*!*/ self) {
+                return self.Data.tag;
             }
 
             [RubyMethod("name=")]
-            public static void SetName(RubyModule/*!*/ self, Object name) {
-                // ... 
+            public static void SetName(ETag/*!*/ self, Object/*!*/ name) {
+                self.Data.tag = name;
             }
         }
 
@@ -239,42 +362,98 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::BogusETag
 
         [RubyClass("BogusETag", Inherits = typeof(ETag))]
-        public static class BogusETag { }
+        public class BogusETag {
+            [RubyConstructor]
+            public static BogusETag Allocator(RubyClass/*!*/ self) {
+                return new BogusETag();
+            }
+        }
+
+        #endregion
+        
+        #region Hpricot::Text
+
+        [RubyClass("Text", Inherits = typeof(BaseElement))]
+        public class Text { 
+            private BasicData _data;
+
+            public Text() : this(new BasicData()) { }
+
+            public Text(BasicData data) {
+                _data = data;
+            }
+
+            internal BasicData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static Text Allocator(RubyClass/*!*/ self) {
+                return new Text();
+            }
+
+            [RubyMethod("content")]
+            public static MutableString GetContent(Text/*!*/ self) {
+                return self.Data.tag as MutableString;
+            }
+
+            [RubyMethod("content=")]
+            public static void SetContent(Text/*!*/ self, Object/*!*/ content) {
+                self.Data.tag = content;
+            }
+        }
 
         #endregion
 
         #region Hpricot::XMLDecl
 
-        [RubyClass("XMLDecl", Inherits = typeof(BaseEle))]
-        public static class XMLDecl {
+        [RubyClass("XMLDecl", Inherits = typeof(BaseElement))]
+        public class XmlDeclaration {
+            private AttributeData _data;
+
+            public XmlDeclaration() : this(new AttributeData()) { }
+
+            public XmlDeclaration(AttributeData data) {
+                _data = data;
+            }
+
+            internal AttributeData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static XmlDeclaration Allocator(RubyClass/*!*/ self) {
+                return new XmlDeclaration();
+            }
+
             [RubyMethod("encoding")]
-            public static Object GetEncoding(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetEncoding(XmlDeclaration/*!*/ self) {
+                return (self.Data.attr as Hash)["encoding"];
             }
 
             [RubyMethod("encoding=")]
-            public static void SetEncoding(RubyModule/*!*/ self, Object encoding) {
-                // ... 
+            public static void SetEncoding(XmlDeclaration/*!*/ self, Object/*!*/ encoding) {
+                (self.Data.attr as Hash)["encoding"] = encoding;
             }
 
             [RubyMethod("standalone")]
-            public static Object GetStandalone(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetStandalone(XmlDeclaration/*!*/ self) {
+                return (self.Data.attr as Hash)["standalone"];
             }
 
             [RubyMethod("standalone=")]
-            public static void SetStandalone(RubyModule/*!*/ self, Object standalone) {
-                // ... 
+            public static void SetStandalone(XmlDeclaration/*!*/ self, Object/*!*/ standalone) {
+                (self.Data.attr as Hash)["standalone"] = standalone;
             }
 
             [RubyMethod("version")]
-            public static Object GetVersion(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetVersion(XmlDeclaration/*!*/ self) {
+                return (self.Data.attr as Hash)["version"];
             }
 
             [RubyMethod("version=")]
-            public static void SetVersion(RubyModule/*!*/ self, Object version) {
-                // ... 
+            public static void SetVersion(XmlDeclaration/*!*/ self, Object/*!*/ version) {
+                (self.Data.attr as Hash)["version"] = version;
             }
         }
 
@@ -282,30 +461,48 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region Hpricot::ProcIns
 
-        [RubyClass("ProcIns", Inherits = typeof(BaseEle))]
-        public static class ProcIns {
+        [RubyClass("ProcIns", Inherits = typeof(BaseElement))]
+        public class ProcedureInstruction {
+            private AttributeData _data;
+
+            public ProcedureInstruction() : this(new AttributeData()) { }
+
+            public ProcedureInstruction(AttributeData data) {
+                _data = data;
+            }
+
+            internal AttributeData Data {
+                get { return _data; }
+            }
+
+            [RubyConstructor]
+            public static ProcedureInstruction Allocator(RubyClass/*!*/ self) {
+                return new ProcedureInstruction();
+            }
+
             [RubyMethod("content")]
-            public static Object GetContent(RubyModule/*!*/ self) {
-                return null;
+            public static MutableString GetContent(ProcedureInstruction/*!*/ self) {
+                return self.Data.tag as MutableString;
             }
 
             [RubyMethod("content=")]
-            public static void SetContent(RubyModule/*!*/ self, Object content) {
-                // ... 
+            public static void SetContent(ProcedureInstruction/*!*/ self, Object/*!*/ content) {
+                self.Data.tag = content;
             }
 
             [RubyMethod("target")]
-            public static Object GetTarget(RubyModule/*!*/ self) {
-                return null;
+            public static Object GetTarget(ProcedureInstruction/*!*/ self) {
+                return self.Data.attr;
             }
 
             [RubyMethod("target=")]
-            public static void SetTarget(RubyModule/*!*/ self, Object target) {
-                // ... 
+            public static void SetTarget(ProcedureInstruction/*!*/ self, Object/*!*/ target) {
+                self.Data.attr = target;
             }
         }
 
         #endregion
+
 
         #region Hpricot::ParseError
 

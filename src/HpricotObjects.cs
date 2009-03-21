@@ -4,26 +4,19 @@ namespace IronRuby.Libraries.Hpricot {
 
     // TODO: I am starting off with this, it will be refactored later.
 
-    public class HpricotState {
-        public Object doc;
-        public Object focus;
-        public Object last;
-        public Object EC;
-        public Char xml;
-        public Char strict;
-        public Char fixup;
-    }
-
-    public class HpricotBasic {
+    public class BasicData {
+        // TODO: MutableString
         public Object tag;
         public Object parent;
     }
 
-    public class HpricotAttr : HpricotBasic {
+    public class AttributeData : BasicData {
+        // TODO: Hash or MutableString?
         public Object attr;
     }
 
-    public class HpricotElement : HpricotBasic {
+    public class ElementData : AttributeData {
+        // TODO: RubyArray
         public Object children;
         public Object etag;
         public Object raw;

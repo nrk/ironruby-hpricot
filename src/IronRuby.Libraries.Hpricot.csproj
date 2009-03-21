@@ -41,6 +41,7 @@
     <Compile Include="Hpricot.cs" />
     <Compile Include="HpricotObjects.cs" />
     <Compile Include="HpricotScanner.cs" />
+    <Compile Include="ScannerState.cs" />
     <Compile Include="Initializers.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

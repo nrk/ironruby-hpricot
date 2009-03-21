@@ -25,7 +25,7 @@ namespace IronRuby.Libraries.Hpricot {
         private RespondToStorage/*!*/ _respondToStorage;
         private ConversionStorage<MutableString> _toMutableString;
 
-        private HpricotState _state;
+        private ScannerState _state;
 
         #endregion
 
@@ -1017,7 +1017,7 @@ namespace IronRuby.Libraries.Hpricot {
             _blockParam.Yield(ary, out result);
         }
 
-        private void rb_hpricot_token(HpricotState state, Object sym, Object tag, Object attr, int raw, int rawlen, bool taint) { 
+        private void rb_hpricot_token(ScannerState state, Object sym, Object tag, Object attr, int raw, int rawlen, bool taint) { 
             // TODO: ...
         }
 
