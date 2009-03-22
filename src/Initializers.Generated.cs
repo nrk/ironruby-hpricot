@@ -192,7 +192,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("raw_string", 0x11, 
-                new System.Func<IronRuby.Libraries.Hpricot.Hpricot.Element, IronRuby.Builtins.MutableString>(IronRuby.Libraries.Hpricot.Hpricot.Element.GetRawString)
+                new System.Func<IronRuby.Libraries.Hpricot.Hpricot.Element, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.Element.GetRawString)
             );
             
         }

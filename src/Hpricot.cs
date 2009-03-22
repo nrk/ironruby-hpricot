@@ -75,12 +75,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("children")]
             public static Object GetChildren(Document/*!*/ self) {
-                return self._data.children;
+                return self._data.Children;
             }
 
             [RubyMethod("children=")]
             public static void SetChildren(Document/*!*/ self, Object/*!*/ children) {
-                self._data.children = children;
+                self._data.Children = children;
             }
         }
 
@@ -98,17 +98,17 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(BaseElement/*!*/ self) {
-                return self._data.tag as MutableString;
+                return self._data.Tag as MutableString;
             }
 
             [RubyMethod("parent")]
             public static Object GetParent(BaseElement/*!*/ self) {
-                return self._data.parent;
+                return self._data.Parent;
             }
 
             [RubyMethod("parent=")]
             public static void SetParent(BaseElement/*!*/ self, Object/*!*/ parent) {
-                self._data.parent = parent;
+                self._data.Parent = parent;
             }
         }
 
@@ -131,12 +131,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("content")]
             public static MutableString GetContent(CData/*!*/ self) {
-                return self._data.tag as MutableString;
+                return self._data.Tag as MutableString;
             }
 
             [RubyMethod("content=")]
             public static void SetContent(CData/*!*/ self, Object/*!*/ content) {
-                self._data.tag = content;
+                self._data.Tag = content;
             }
         }
 
@@ -159,12 +159,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("content")]
             public static MutableString GetContent(Comment/*!*/ self) {
-                return self._data.tag as MutableString;
+                return self._data.Tag as MutableString;
             }
 
             [RubyMethod("content=")]
             public static void SetContent(Comment/*!*/ self, Object/*!*/ content) {
-                self._data.tag = content;
+                self._data.Tag = content;
             }
         }
 
@@ -174,6 +174,9 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("DocType", Inherits = typeof(BaseElement))]
         public class DocumentType : BaseElement {
+            private static readonly MutableString _systemId = MutableString.Create("system_id");
+            private static readonly MutableString _publicId = MutableString.Create("public_id");
+
             public DocumentType() : this(new AttributeData()) { }
 
             public DocumentType(AttributeData data) {
@@ -187,12 +190,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("target")]
             public static Object GetTarget(DocumentType/*!*/ self) {
-                return self._data.tag;
+                return self._data.Tag;
             }
 
             [RubyMethod("target=")]
             public static void SetTarget(DocumentType/*!*/ self, Object/*!*/ target) {
-                self._data.tag = target;
+                self._data.Tag = target;
             }
 
             [RubyMethod("public_id")]
@@ -201,16 +204,19 @@ namespace IronRuby.Libraries.Hpricot {
                 if (data.AttrIsNull) {
                     return null;
                 }
-                return (data.attr as Hash)[MutableString.Create("public_id")];
+
+                Object value;
+                (data.Attr as Hash).TryGetValue(_publicId, out value);
+                return value;
             }
 
             [RubyMethod("public_id=")]
             public static void SetPublicId(RubyContext context/*!*/, DocumentType/*!*/ self, Object/*!*/ publicId) {
                 AttributeData data = self._data as AttributeData;
                 if (data.AttrIsNull) {
-                    data.attr = new Hash(context);
+                    data.Attr = new Hash(context);
                 }
-                (data.attr as Hash)[MutableString.Create("public_id")] = publicId;
+                (data.Attr as Hash)[_publicId] = publicId;
             }
 
             [RubyMethod("system_id")]
@@ -219,16 +225,19 @@ namespace IronRuby.Libraries.Hpricot {
                 if (data.AttrIsNull) {
                     return null;
                 }
-                return (data.attr as Hash)[MutableString.Create("system_id")];
+
+                Object value;
+                (data.Attr as Hash).TryGetValue(_systemId, out value);
+                return value;
             }
 
             [RubyMethod("system_id=")]
             public static void SetSystemId(RubyContext context/*!*/, DocumentType/*!*/ self, Object/*!*/ systemId) {
                 AttributeData data = self._data as AttributeData;
                 if (data.AttrIsNull) {
-                    data.attr = new Hash(context);
+                    data.Attr = new Hash(context);
                 }
-                (data.attr as Hash)[MutableString.Create("system_id")] = systemId;
+                (data.Attr as Hash)[_systemId] = systemId;
             }
         }
 
@@ -244,61 +253,60 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-
             [RubyConstructor]
             public static Element Allocator(RubyClass/*!*/ self) {
                 return new Element();
             }
 
             [RubyMethod("raw_string")]
-            public static MutableString GetRawString(Element/*!*/ self) {
-                return self._data.tag as MutableString;
+            public static Object GetRawString(Element/*!*/ self) {
+                return (self._data.Tag as BaseElement).GetData<BasicData>().Tag;
             }
 
             [RubyMethod("clear_raw")]
             public static bool ClearRaw(Element/*!*/ self) {
-                self._data.tag = null;
+                self._data.Tag = null;
                 return true;
             }
 
             [RubyMethod("raw_attributes")]
             public static Object GetRawAttributes(Element/*!*/ self) {
-                return (self._data as ElementData).attr;
+                return (self._data as ElementData).Attr;
             }
 
             [RubyMethod("raw_attributes=")]
             public static void SetRawAttributes(Element/*!*/ self, Object/*!*/ rawAttributes) {
-                (self._data as ElementData).attr = rawAttributes;
+                (self._data as ElementData).Attr = rawAttributes;
             }
 
             [RubyMethod("children")]
             public static Object GetChildren(Element/*!*/ self) {
-                return (self._data as ElementData).children;
+                return (self._data as ElementData).Children;
             }
 
             [RubyMethod("children=")]
             public static void SetChildren(Element/*!*/ self, Object/*!*/ children) {
-                (self._data as ElementData).children = children;
+                (self._data as ElementData).Children = children;
             }
 
             [RubyMethod("etag")]
             public static Object GetEtag(Element/*!*/ self) {
-                return (self._data as ElementData).etag;
+                return (self._data as ElementData).ETag;
             }
 
             [RubyMethod("etag=")]
             public static void SetEtag(Element/*!*/ self, Object/*!*/ etag) {
-                (self._data as ElementData).etag = etag;
+                (self._data as ElementData).ETag = etag;
             }
 
             [RubyMethod("name")]
             public static Object GetName(Element/*!*/ self) {
-                return self._data.tag;
+                return self._data.Tag;
             }
 
             [RubyMethod("name=")]
             public static void SetName(Element/*!*/ self, Object/*!*/ name) {
-                self._data.tag = name;
+                self._data.Tag = name;
             }
         }
 
@@ -322,23 +330,23 @@ namespace IronRuby.Libraries.Hpricot {
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(ETag/*!*/ self) {
                 // TODO: hmm, I'm not really sure of this...
-                return (self._data as AttributeData).attr as MutableString;
+                return (self._data as AttributeData).Attr as MutableString;
             }
 
             [RubyMethod("clear_raw")]
             public static bool ClearRaw(ETag/*!*/ self) {
-                (self._data as AttributeData).attr = null;
+                (self._data as AttributeData).Attr = null;
                 return true;
             }
 
             [RubyMethod("name")]
             public static Object GetName(ETag/*!*/ self) {
-                return self._data.tag;
+                return self._data.Tag;
             }
 
             [RubyMethod("name=")]
             public static void SetName(ETag/*!*/ self, Object/*!*/ name) {
-                self._data.tag = name;
+                self._data.Tag = name;
             }
         }
 
@@ -373,12 +381,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("content")]
             public static MutableString GetContent(Text/*!*/ self) {
-                return self._data.tag as MutableString;
+                return self._data.Tag as MutableString;
             }
 
             [RubyMethod("content=")]
             public static void SetContent(Text/*!*/ self, Object/*!*/ content) {
-                self._data.tag = content;
+                self._data.Tag = content;
             }
         }
 
@@ -388,14 +396,14 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("XMLDecl", Inherits = typeof(BaseElement))]
         public class XmlDeclaration : BaseElement {
+            private static readonly MutableString _encoding = MutableString.Create("encoding");
+            private static readonly MutableString _standalone = MutableString.Create("standalone");
+            private static readonly MutableString _version = MutableString.Create("version");
+
             public XmlDeclaration() : this(new AttributeData()) { }
 
             public XmlDeclaration(AttributeData data) {
                 _data = data;
-            }
-
-            public T GetData<T>() where T : BasicData {
-                return _data as T;
             }
 
             [RubyConstructor]
@@ -409,16 +417,19 @@ namespace IronRuby.Libraries.Hpricot {
                 if (data.AttrIsNull) {
                     return null;
                 }
-                return (data.attr as Hash)[MutableString.Create("encoding")];
+
+                Object value;
+                (data.Attr as Hash).TryGetValue(_encoding, out value);
+                return value;
             }
 
             [RubyMethod("encoding=")]
             public static void SetEncoding(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ encoding) {
                 AttributeData data = self._data as AttributeData;
                 if (data.AttrIsNull) {
-                    data.attr = new Hash(context);
+                    data.Attr = new Hash(context);
                 }
-                (data.attr as Hash)[MutableString.Create("encoding")] = encoding;
+                (data.Attr as Hash)[_encoding] = encoding;
             }
 
             [RubyMethod("standalone")]
@@ -427,16 +438,19 @@ namespace IronRuby.Libraries.Hpricot {
                 if (data.AttrIsNull) {
                     return null;
                 }
-                return (data.attr as Hash)[MutableString.Create("standalone")];
+
+                Object value;
+                (data.Attr as Hash).TryGetValue(_standalone, out value);
+                return value;
             }
 
             [RubyMethod("standalone=")]
             public static void SetStandalone(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ standalone) {
                 AttributeData data = self._data as AttributeData;
                 if (data.AttrIsNull) {
-                    data.attr = new Hash(context);
+                    data.Attr = new Hash(context);
                 }
-                (data.attr as Hash)[MutableString.Create("standalone")] = standalone;
+                (data.Attr as Hash)[_standalone] = standalone;
             }
 
             [RubyMethod("version")]
@@ -445,16 +459,19 @@ namespace IronRuby.Libraries.Hpricot {
                 if (data.AttrIsNull) {
                     return null;
                 }
-                return (data.attr as Hash)[MutableString.Create("version")];
+
+                Object value;
+                (data.Attr as Hash).TryGetValue(_version, out value);
+                return value;
             }
 
             [RubyMethod("version=")]
             public static void SetVersion(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ version) {
                 AttributeData data = self._data as AttributeData;
                 if (data.AttrIsNull) {
-                    data.attr = new Hash(context);
+                    data.Attr = new Hash(context);
                 }
-                (data.attr as Hash)[MutableString.Create("version")] = version;
+                (data.Attr as Hash)[_version] = version;
             }
         }
 
@@ -477,22 +494,22 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("content")]
             public static MutableString GetContent(ProcedureInstruction/*!*/ self) {
-                return self._data.tag as MutableString;
+                return self._data.Tag as MutableString;
             }
 
             [RubyMethod("content=")]
             public static void SetContent(ProcedureInstruction/*!*/ self, Object/*!*/ content) {
-                self._data.tag = content;
+                self._data.Tag = content;
             }
 
             [RubyMethod("target")]
             public static Object GetTarget(ProcedureInstruction/*!*/ self) {
-                return (self._data as AttributeData).attr;
+                return (self._data as AttributeData).Attr;
             }
 
             [RubyMethod("target=")]
             public static void SetTarget(ProcedureInstruction/*!*/ self, Object/*!*/ target) {
-                (self._data as AttributeData).attr = target;
+                (self._data as AttributeData).Attr = target;
             }
         }
 
