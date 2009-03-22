@@ -993,6 +993,25 @@ namespace IronRuby.Libraries.Hpricot {
 
         #endregion
 
+        #region miscellaneous methods
+
+        private static bool OPT(Hash opts, SymbolId key) {
+            if (opts != null) {
+                Object value;
+                if (opts.TryGetValue(key, out value) && value is bool) {
+                    return (bool)value;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
+        #endregion
+
         #region methods for the parser logic
 
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
