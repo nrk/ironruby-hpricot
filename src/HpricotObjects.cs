@@ -1,4 +1,5 @@
 ﻿using System;
+using IronRuby.Builtins;
 
 namespace IronRuby.Libraries.Hpricot {
 
@@ -13,6 +14,11 @@ namespace IronRuby.Libraries.Hpricot {
     public class AttributeData : BasicData {
         // TODO: Hash or MutableString?
         public Object attr;
+
+        // TODO: this smells, will fix later
+        public bool AttrIsNull {
+            get { return attr == null; }
+        }
     }
 
     public class ElementData : AttributeData {

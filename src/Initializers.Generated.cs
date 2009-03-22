@@ -8,9 +8,7 @@ namespace IronRuby.Libraries.Hpricot {
             
             
             IronRuby.Builtins.RubyModule def1 = DefineGlobalModule("Hpricot", typeof(IronRuby.Libraries.Hpricot.Hpricot), true, null, LoadHpricot_Class, LoadHpricot_Constants, IronRuby.Builtins.RubyModule.EmptyArray);
-            IronRuby.Builtins.RubyClass def2 = DefineClass("Hpricot::BaseEle", typeof(IronRuby.Libraries.Hpricot.Hpricot.BaseElement), true, classRef0, LoadHpricot__BaseEle_Instance, null, null, IronRuby.Builtins.RubyModule.EmptyArray, 
-                new System.Func<IronRuby.Builtins.RubyClass, IronRuby.Libraries.Hpricot.Hpricot.BaseElement>(IronRuby.Libraries.Hpricot.Hpricot.BaseElement.Allocator)
-            );
+            IronRuby.Builtins.RubyClass def2 = DefineClass("Hpricot::BaseEle", typeof(IronRuby.Libraries.Hpricot.Hpricot.BaseElement), true, classRef0, LoadHpricot__BaseEle_Instance, null, null, IronRuby.Builtins.RubyModule.EmptyArray);
             IronRuby.Builtins.RubyClass def6 = DefineClass("Hpricot::Doc", typeof(IronRuby.Libraries.Hpricot.Hpricot.Document), true, classRef0, LoadHpricot__Doc_Instance, null, null, IronRuby.Builtins.RubyModule.EmptyArray, 
                 new System.Func<IronRuby.Builtins.RubyClass, IronRuby.Libraries.Hpricot.Hpricot.Document>(IronRuby.Libraries.Hpricot.Hpricot.Document.Allocator)
             );
@@ -135,7 +133,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("public_id=", 0x11, 
-                new System.Action<IronRuby.Libraries.Hpricot.Hpricot.DocumentType, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.DocumentType.SetPublicId)
+                new System.Action<IronRuby.Runtime.RubyContext, IronRuby.Libraries.Hpricot.Hpricot.DocumentType, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.DocumentType.SetPublicId)
             );
             
             module.DefineLibraryMethod("system_id", 0x11, 
@@ -143,7 +141,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("system_id=", 0x11, 
-                new System.Action<IronRuby.Libraries.Hpricot.Hpricot.DocumentType, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.DocumentType.SetSystemId)
+                new System.Action<IronRuby.Runtime.RubyContext, IronRuby.Libraries.Hpricot.Hpricot.DocumentType, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.DocumentType.SetSystemId)
             );
             
             module.DefineLibraryMethod("target", 0x11, 
@@ -254,7 +252,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("encoding=", 0x11, 
-                new System.Action<IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetEncoding)
+                new System.Action<IronRuby.Runtime.RubyContext, IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetEncoding)
             );
             
             module.DefineLibraryMethod("standalone", 0x11, 
@@ -262,7 +260,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("standalone=", 0x11, 
-                new System.Action<IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetStandalone)
+                new System.Action<IronRuby.Runtime.RubyContext, IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetStandalone)
             );
             
             module.DefineLibraryMethod("version", 0x11, 
@@ -270,7 +268,7 @@ namespace IronRuby.Libraries.Hpricot {
             );
             
             module.DefineLibraryMethod("version=", 0x11, 
-                new System.Action<IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetVersion)
+                new System.Action<IronRuby.Runtime.RubyContext, IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration, System.Object>(IronRuby.Libraries.Hpricot.Hpricot.XmlDeclaration.SetVersion)
             );
             
         }
