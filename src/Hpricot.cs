@@ -6,6 +6,17 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
 namespace IronRuby.Libraries.Hpricot {
+
+    #region IHpricotDataContainer<T>
+
+    // TODO: I am still not sure about this kind of abstraction, but 
+    //       for now it is enough to get things working.
+    public interface IHpricotDataContainer<T> where T : BasicData {
+        T Data { get; }
+    }
+
+    #endregion
+
     [RubyModule("Hpricot")]
     public static class Hpricot {
         #region Hpricot
@@ -46,7 +57,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::Doc
 
         [RubyClass("Doc")]
-        public class Document {
+        public class Document : IHpricotDataContainer<ElementData> {
             private ElementData _data;
 
             public Document() : this(new ElementData()) { }
@@ -55,7 +66,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal ElementData Data {
+            public ElementData Data {
                 get { return _data; }
             }
 
@@ -80,7 +91,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::BaseEle
 
         [RubyClass("BaseEle")]
-        public class BaseElement {
+        public class BaseElement : IHpricotDataContainer<BasicData> {
             private BasicData _data;
 
             public BaseElement() : this(new BasicData()) { }
@@ -89,7 +100,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal BasicData Data {
+            public BasicData Data {
                 get { return _data; }
             }
 
@@ -119,7 +130,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::CData 
 
         [RubyClass("CData", Inherits = typeof(BaseElement))]
-        public class CData {
+        public class CData : IHpricotDataContainer<BasicData> {
             private BasicData _data;
 
             public CData() : this(new BasicData()) { }
@@ -128,7 +139,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal BasicData Data {
+            public BasicData Data {
                 get { return _data; }
             }
 
@@ -153,7 +164,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::Comment
 
         [RubyClass("Comment", Inherits = typeof(BaseElement))]
-        public class Comment {
+        public class Comment : IHpricotDataContainer<BasicData> {
             private BasicData _data;
 
             public Comment() : this(new BasicData()) { }
@@ -162,7 +173,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal BasicData Data {
+            public BasicData Data {
                 get { return _data; }
             }
             
@@ -187,7 +198,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::DocType
 
         [RubyClass("DocType", Inherits = typeof(BaseElement))]
-        public class DocumentType {
+        public class DocumentType : IHpricotDataContainer<AttributeData> {
             private AttributeData _data;
 
             public DocumentType() : this(new AttributeData()) { }
@@ -196,7 +207,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal AttributeData Data {
+            public AttributeData Data {
                 get { return _data; }
             }
 
@@ -241,7 +252,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::Elem
 
         [RubyClass("Elem", Inherits = typeof(BaseElement))]
-        public class Element {
+        public class Element : IHpricotDataContainer<ElementData> {
             private ElementData _data;
 
             public Element() : this(new ElementData()) { }
@@ -250,7 +261,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal ElementData Data {
+            public ElementData Data {
                 get { return _data; }
             }
 
@@ -316,7 +327,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::ETag
 
         [RubyClass("ETag", Inherits = typeof(BaseElement))]
-        public class ETag {
+        public class ETag : IHpricotDataContainer<AttributeData> {
             private AttributeData _data;
 
             public ETag() : this(new AttributeData()) { }
@@ -325,7 +336,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal AttributeData Data {
+            public AttributeData Data {
                 get { return _data; }
             }
 
@@ -374,7 +385,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::Text
 
         [RubyClass("Text", Inherits = typeof(BaseElement))]
-        public class Text { 
+        public class Text : IHpricotDataContainer<BasicData> { 
             private BasicData _data;
 
             public Text() : this(new BasicData()) { }
@@ -383,7 +394,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal BasicData Data {
+            public BasicData Data {
                 get { return _data; }
             }
 
@@ -408,7 +419,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::XMLDecl
 
         [RubyClass("XMLDecl", Inherits = typeof(BaseElement))]
-        public class XmlDeclaration {
+        public class XmlDeclaration : IHpricotDataContainer<AttributeData> {
             private AttributeData _data;
 
             public XmlDeclaration() : this(new AttributeData()) { }
@@ -417,7 +428,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal AttributeData Data {
+            public AttributeData Data {
                 get { return _data; }
             }
 
@@ -462,7 +473,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region Hpricot::ProcIns
 
         [RubyClass("ProcIns", Inherits = typeof(BaseElement))]
-        public class ProcedureInstruction {
+        public class ProcedureInstruction : IHpricotDataContainer<AttributeData> {
             private AttributeData _data;
 
             public ProcedureInstruction() : this(new AttributeData()) { }
@@ -471,7 +482,7 @@ namespace IronRuby.Libraries.Hpricot {
                 _data = data;
             }
 
-            internal AttributeData Data {
+            public AttributeData Data {
                 get { return _data; }
             }
 

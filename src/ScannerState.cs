@@ -6,7 +6,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region fields
 
         private Object _doc;
-        private Object _focus;
+        private IHpricotDataContainer<BasicData> _focus;
         private Object _last;
         private Object _EC;
         private bool _xml;
@@ -32,7 +32,7 @@ namespace IronRuby.Libraries.Hpricot {
             set { _doc = value; }
         }
 
-        public Object Focus {
+        public IHpricotDataContainer<BasicData> Focus {
             get { return _focus; }
             set { _focus = value; }
         }
