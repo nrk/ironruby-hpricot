@@ -9,8 +9,8 @@ namespace IronRuby.Libraries.Hpricot {
         public Object focus;
         public Object last;
         public Object EC;
-        public Char xml;
-        public Char strict;
-        public Char fixup;
+        public bool xml;
+        public bool strict;
+        public bool fixup;
     }
 }
