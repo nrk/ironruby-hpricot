@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using IronRuby.Builtins;
@@ -41,6 +42,9 @@ namespace IronRuby.Libraries.Hpricot {
         private static Object sym_text = SymbolTable.StringToId("text");
         private static Object sym_EMPTY = SymbolTable.StringToId("EMPTY");
         private static Object sym_CDATA = SymbolTable.StringToId("CDATA");
+
+        private static Object symAllow = SymbolTable.StringToId("allow");
+        private static Object symDeny = SymbolTable.StringToId("deny");          
 
         #endregion
 
@@ -1021,6 +1025,58 @@ namespace IronRuby.Libraries.Hpricot {
             }
         }
 
+        private T H_ELE<T>(ScannerState state, Object sym, Object tag, Object attr, Object ec, Int32 raw, Int32 rawlen) where T : IHpricotDataContainer, new() {
+            // TODO: way ugly, isn't it?
+
+            T ele = new T();
+
+            if (ele is Hpricot.Element) {
+                ElementData he = ele.GetData<ElementData>();
+
+                he.name = 0;
+                he.tag = tag;
+                he.attr = attr;
+                he.EC = ec;
+
+                if (raw > 0 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
+                    he.raw = MutableString.Create(new String(buf, raw, rawlen));
+                }
+            }
+            else if (ele is Hpricot.DocumentType || ele is Hpricot.ProcedureInstruction || ele is Hpricot.XmlDeclaration || ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
+                AttributeData ha = ele.GetData<AttributeData>();
+
+                ha.tag = tag;
+                if (ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
+                    if (raw > 0) {
+                        ha.attr = MutableString.Create(new String(buf, raw, rawlen));
+                    }
+                }
+                else {
+                    ha.attr = attr;
+                }
+            }
+            else {
+                BasicData hb = ele.GetData<BasicData>();
+                hb.tag = tag;
+            }
+
+            state.Last = ele;
+            return ele;
+        }
+
+        private static void rb_hpricot_add(IHpricotDataContainer focus, IHpricotDataContainer ele) {
+            ElementData he = focus.GetData<ElementData>();
+            BasicData he2 = ele.GetData<BasicData>();
+
+            RubyArray children = he.children as RubyArray;
+            if (children == null) {
+                children = new RubyArray(1);
+                he.children = children;
+            }
+            children.Add(ele);
+            he2.parent = focus;
+        }
+
         #endregion
 
 
@@ -1049,7 +1105,186 @@ namespace IronRuby.Libraries.Hpricot {
         }
 
         private void rb_hpricot_token(ScannerState state, Object sym, Object tag, Object attr, int raw, int rawlen, bool taint) { 
-            // TODO: ...
+            Object ec = null;
+
+            if (!state.Xml) {
+                ElementData last = state.Focus.GetData<ElementData>();
+
+                // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
+                if (sym_cdata.Equals(last.EC) && 
+                    (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
+                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.name.GetHashCode())) {
+                    sym = sym_text;
+                    tag = MutableString.Create(new String(buf, raw, rawlen));
+                }
+
+                if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
+                    // is state.EC really an hash? not sure yet...
+                    Debug.Assert(state.EC is Hash);
+                    if (state.EC is Hash && (state.EC as Hash).ContainsKey(tag)) {
+                        Object tagu = (state.EC as Hash)[tag];
+                        // TODO: downcase tag and set state.EC to tag;
+                    }
+
+                    if (sym_emptytag.Equals(sym)) {
+                        if (sym_EMPTY.Equals(ec)) {
+                            sym = sym_stag;
+                        }
+                    }
+                    else if (sym_stag.Equals(sym)) {
+                        if (sym_EMPTY.Equals(ec)) {
+                            sym = sym_emptytag;
+                        }
+                    }
+                }
+            }
+
+            if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym)) { 
+                Hpricot.Element ele = H_ELE<Hpricot.Element>(state, sym, tag, attr, ec, raw, rawlen);
+                ElementData he = ele.GetData<ElementData>();
+                // tag.GetHashCode() ???
+                he.name = tag.GetHashCode();
+
+                if (!state.Xml) {
+                    Object match = null;
+                    //Hpricot.Element e = state.Focus as Hpricot.Element;
+                    IHpricotDataContainer e = state.Focus;
+
+                    while (e != state.Doc) {
+                        ElementData hee = e.GetData<ElementData>();
+
+                        if (hee.EC is Hash) {
+                            Object has;
+                            if ((hee.EC as Hash).TryGetValue(he.name, out has)) {
+                                if (has is bool && (bool) has == true) {
+                                    if (match == null) {
+                                        match = e;
+                                    }
+                                }
+                                else if (symAllow.Equals(has)) {
+                                    match = state.Focus;
+                                }
+                                else if (symDeny.Equals(has)) { 
+                                    match = null;
+                                }
+                            }
+                        }
+
+                        //Debug.Assert(he.parent is IHpricotDataContainer, "he.parent is not an IHpricotDataContainer");
+                        e = hee.parent as IHpricotDataContainer;
+                    }
+
+                    if (match == null) {
+                        match = state.Focus;
+                    }
+                    // hmmm...
+                    //state.Focus = match as IHpricotDataContainer<BasicData>;
+                    state.Focus = match as IHpricotDataContainer;
+
+                    rb_hpricot_add(state.Focus, ele);
+                }
+
+                //
+                // in the case of a start tag that should be empty, just
+                // skip the step that focuses the element.  focusing moves
+                // us deeper into the document.
+                //
+                if (sym_stag.Equals(sym)) {
+                    if (state.Xml || !sym_EMPTY.Equals(ec)) {
+                        //state.Focus = ele as IHpricotDataContainer<BasicData>;
+                        state.Focus = ele as IHpricotDataContainer;
+                        state.Last = null;
+                    }
+                }
+            }
+            else if (sym_etag.Equals(sym)) {
+                int name;
+                Object match = null;
+                Hpricot.Element e = state.Focus as Hpricot.Element;
+                if (state.Strict) {
+                    Debug.Assert(state.EC is Hash);
+                    if (!(state.EC as Hash).ContainsKey(tag)) {
+                        tag = MutableString.Create("div");
+                    }
+                }
+
+                //
+                // another optimization will be to improve this very simple
+                // O(n) tag search, where n is the depth of the focused tag.
+                //
+                // (see also: the search above for fixups)
+                //
+                // tag.GetHashCode() ??
+                name = tag.GetHashCode();
+                
+                while (e != state.Doc) {
+                    ElementData he = e.GetData<ElementData>();
+                    if (he.name == name) {
+                        match = e;
+                        break;
+                    }
+
+                    Debug.Assert(he.parent is Hpricot.Element);
+                    e = he.parent as Hpricot.Element;
+                }
+
+                if (match == null) {
+                    Hpricot.BogusETag ele = H_ELE<Hpricot.BogusETag>(state, sym, tag, attr, ec, raw, rawlen);
+                    rb_hpricot_add(state.Focus, ele as IHpricotDataContainer);
+                }
+                else {
+                    Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
+                    Debug.Assert(match is Hpricot.Element);
+                    ElementData he = (match as Hpricot.Element).GetData<ElementData>();
+                    he.tag = ele;
+                    Debug.Assert(he.parent is IHpricotDataContainer);
+                    Debug.Assert(he.parent is IHpricotDataContainer);
+                    state.Focus = he.parent as IHpricotDataContainer;
+                    state.Last = null;
+                }
+
+            }
+            else if (sym_cdata.Equals(sym)) {
+                rb_hpricot_add(state.Focus, H_ELE<Hpricot.CData>(state, sym, tag, attr, ec, raw, rawlen));
+            }
+            else if (sym_comment.Equals(sym)) {
+                rb_hpricot_add(state.Focus, H_ELE<Hpricot.Comment>(state, sym, tag, attr, ec, raw, rawlen));
+            }
+            else if (sym_doctype.Equals(sym)) {
+                if (state.Strict) {
+                    // TODO: need to check is attr is really an Hash instance
+                    Debug.Assert(attr is Hash);
+                    (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.Create("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
+                    (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.Create("-//W3C//DTD XHTML 1.0 Strict//EN"));
+                }
+                rb_hpricot_add(state.Focus, H_ELE<Hpricot.DocumentType>(state, sym, tag, attr, ec, raw, rawlen));
+            }
+            else if (sym_procins.Equals(sym)) {
+                Debug.Assert(tag is MutableString);
+                System.Text.RegularExpressions.Match match = ProcInsParse.Match(tag as MutableString);
+                // TODO: tag is String or MutableString?
+                tag = MutableString.Create(match.Captures[0].Value);
+                attr = MutableString.Create(match.Captures[1].Value);
+                rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
+            }
+            else if (sym_text.Equals(sym)) {
+                // TODO: add raw_string as well?
+                if (state.Last != null && state.Last is Hpricot.Text) {
+                    Debug.Assert(state.Last is Hpricot.Element);
+                    ElementData he = (state.Last as Hpricot.Element).GetData<ElementData>();
+
+                    Debug.Assert(tag is MutableString);
+                    Debug.Assert(he.tag is MutableString);
+
+                    (he.tag as MutableString).Append(tag as MutableString);
+                }
+                else {
+                    rb_hpricot_add(state.Focus, H_ELE<Hpricot.Text>(state, sym, tag, attr, ec, raw, rawlen));
+                }
+            }
+            else if (sym_xmldecl.Equals(sym)) {
+                rb_hpricot_add(state.Focus, H_ELE<Hpricot.XmlDeclaration>(state, sym, tag, attr, ec, raw, rawlen));
+            }
         }
 
         #endregion
@@ -1216,6 +1451,23 @@ namespace IronRuby.Libraries.Hpricot {
             }
             else {
                 throw RubyExceptions.CreateArgumentError("bad Hpricot argument, String or IO only please.");
+            }
+
+            if (_blockParam == null) { 
+                ScannerState state = new ScannerState();
+                Hpricot.Document doc = new Hpricot.Document();
+                state.Doc = doc;
+                state.Focus = state.Doc as IHpricotDataContainer;
+                state.Xml = false;
+                state.Strict = false;
+                state.Fixup = false;
+                if (state.Strict) {
+                    state.Fixup = true;
+                }
+
+                //rb_ivar_set(S->doc, rb_intern("@options"), opts);
+                state.EC = new Hash(_currentContext);
+                _state = state;
             }
 
             buffer_size = BufferSize.HasValue ? BufferSize.Value : DEFAULT_BUFFER_SIZE;
@@ -1554,6 +1806,10 @@ namespace IronRuby.Libraries.Hpricot {
                     te = (te - ts);
                     ts = 0;
                 }
+            }
+
+            if (_state != null) {
+                return _state.Doc;
             }
 
             return 0;

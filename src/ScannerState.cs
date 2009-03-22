@@ -5,9 +5,9 @@ namespace IronRuby.Libraries.Hpricot {
     public class ScannerState {
         #region fields
 
-        private Object _doc;
-        private IHpricotDataContainer<BasicData> _focus;
-        private Object _last;
+        private IHpricotDataContainer _doc;
+        private IHpricotDataContainer _focus;
+        private IHpricotDataContainer _last;
         private Object _EC;
         private bool _xml;
         private bool _strict;
@@ -27,17 +27,17 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region properties 
 
-        public Object Doc {
+        public IHpricotDataContainer Doc {
             get { return _doc; }
             set { _doc = value; }
         }
 
-        public IHpricotDataContainer<BasicData> Focus {
+        public IHpricotDataContainer Focus {
             get { return _focus; }
             set { _focus = value; }
         }
 
-        public Object Last {
+        public IHpricotDataContainer Last {
             get { return _last; }
             set { _last = value; }
         }
