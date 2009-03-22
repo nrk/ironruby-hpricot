@@ -269,8 +269,11 @@ module Hpricot
 
     def self.filter(nodes, expr, truth = true)
         until expr.empty?
-            _, *m = *expr.match(/^(?:#{ATTR_RE}|#{BRACK_RE}|#{FUNC_RE}|#{CUST_RE}|#{CATCH_RE})/)
-            break unless _
+            # TODO: temporary workaround, needed until the bug #22518 (http://is.gd/jhaf) is fixed in IronRuby
+            break unless (matchData = expr.match(/^(?:#{ATTR_RE}|#{BRACK_RE}|#{FUNC_RE}|#{CUST_RE}|#{CATCH_RE})/))
+            _, *m = matchData.to_a
+            #_, *m = *expr.match(/^(?:#{ATTR_RE}|#{BRACK_RE}|#{FUNC_RE}|#{CUST_RE}|#{CATCH_RE})/)
+            #break unless _
 
             expr = $'
             m.compact!
