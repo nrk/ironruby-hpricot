@@ -226,22 +226,22 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("public_id")]
             public static Object GetPublicId(DocumentType/*!*/ self) {
-                return (self._data.attr as Hash)["public_id"];
+                return (self._data.attr as Hash)[MutableString.Create("public_id")];
             }
 
             [RubyMethod("public_id=")]
             public static void SetPublicId(DocumentType/*!*/ self, Object/*!*/ publicId) {
-                (self._data.attr as Hash)["public_id"] = publicId;
+                (self._data.attr as Hash)[MutableString.Create("public_id")] = publicId;
             }
 
             [RubyMethod("system_id")]
             public static Object GetSystemId(DocumentType/*!*/ self) {
-                return (self._data.attr as Hash)["system_id"];
+                return (self._data.attr as Hash)[MutableString.Create("system_id")];
             }
 
             [RubyMethod("system_id=")]
             public static void SetSystemId(DocumentType/*!*/ self, Object/*!*/ systemId) {
-                (self._data.attr as Hash)["system_id"] = systemId;
+                (self._data.attr as Hash)[MutableString.Create("system_id")] = systemId;
             }
         }
 
@@ -437,32 +437,32 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("encoding")]
             public static Object GetEncoding(XmlDeclaration/*!*/ self) {
-                return (self._data.attr as Hash)["encoding"];
+                return (self._data.attr as Hash)[MutableString.Create("encoding")];
             }
 
             [RubyMethod("encoding=")]
             public static void SetEncoding(XmlDeclaration/*!*/ self, Object/*!*/ encoding) {
-                (self._data.attr as Hash)["encoding"] = encoding;
+                (self._data.attr as Hash)[MutableString.Create("encoding")] = encoding;
             }
 
             [RubyMethod("standalone")]
             public static Object GetStandalone(XmlDeclaration/*!*/ self) {
-                return (self._data.attr as Hash)["standalone"];
+                return (self._data.attr as Hash)[MutableString.Create("standalone")];
             }
 
             [RubyMethod("standalone=")]
             public static void SetStandalone(XmlDeclaration/*!*/ self, Object/*!*/ standalone) {
-                (self._data.attr as Hash)["standalone"] = standalone;
+                (self._data.attr as Hash)[MutableString.Create("standalone")] = standalone;
             }
 
             [RubyMethod("version")]
             public static Object GetVersion(XmlDeclaration/*!*/ self) {
-                return (self._data.attr as Hash)["version"];
+                return (self._data.attr as Hash)[MutableString.Create("version")];
             }
 
             [RubyMethod("version=")]
             public static void SetVersion(XmlDeclaration/*!*/ self, Object/*!*/ version) {
-                (self._data.attr as Hash)["version"] = version;
+                (self._data.attr as Hash)[MutableString.Create("version")] = version;
             }
         }
 
