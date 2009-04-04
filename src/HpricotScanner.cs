@@ -1148,14 +1148,14 @@ namespace IronRuby.Libraries.Hpricot {
 
             taint = _currentContext.IsObjectTainted(source);
 
-            bool sourceRespondsToRead = Protocols.RespondTo(_respondToStorage, _currentContext, source, "read");
+            bool sourceRespondsToRead = Protocols.RespondTo(_respondToStorage, source, "read");
 
             RubyIOReadCallSite readCallSite = null;
             if (sourceRespondsToRead) {
-                readCallSite = RubyIOReadCallSite.Create(RubyCallAction.Make("read", 3));
+                readCallSite = RubyIOReadCallSite.Create(RubyCallAction.Make(_currentContext, "read", 3));
             }
-            else if (Protocols.RespondTo(_respondToStorage, _currentContext, source, "to_str")) {
-                source = Protocols.CastToString(_toMutableString, _currentContext, source);
+            else if (Protocols.RespondTo(_respondToStorage, source, "to_str")) {
+                source = Protocols.CastToString(_toMutableString, source);
             }
             else {
                 throw RubyExceptions.CreateArgumentError("bad Hpricot argument, String or IO only please.");
