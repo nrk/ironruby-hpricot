@@ -1033,31 +1033,31 @@ namespace IronRuby.Libraries.Hpricot {
             if (ele is Hpricot.Element) {
                 ElementData he = ele.GetData<ElementData>();
 
-                he.name = 0;
-                he.tag = tag;
-                he.attr = attr;
+                he.Name = 0;
+                he.Tag = tag;
+                he.Attr = attr;
                 he.EC = ec;
 
                 if (raw > 0 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
-                    he.raw = MutableString.Create(new String(buf, raw, rawlen));
+                    he.Raw = MutableString.Create(new String(buf, raw, rawlen));
                 }
             }
             else if (ele is Hpricot.DocumentType || ele is Hpricot.ProcedureInstruction || ele is Hpricot.XmlDeclaration || ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
                 AttributeData ha = ele.GetData<AttributeData>();
 
-                ha.tag = tag;
+                ha.Tag = tag;
                 if (ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
                     if (raw > 0) {
-                        ha.attr = MutableString.Create(new String(buf, raw, rawlen));
+                        ha.Attr = MutableString.Create(new String(buf, raw, rawlen));
                     }
                 }
                 else {
-                    ha.attr = attr;
+                    ha.Attr = attr;
                 }
             }
             else {
                 BasicData hb = ele.GetData<BasicData>();
-                hb.tag = tag;
+                hb.Tag = tag;
             }
 
             state.Last = ele;
@@ -1068,13 +1068,13 @@ namespace IronRuby.Libraries.Hpricot {
             ElementData he = focus.GetData<ElementData>();
             BasicData he2 = ele.GetData<BasicData>();
 
-            RubyArray children = he.children as RubyArray;
+            RubyArray children = he.Children as RubyArray;
             if (children == null) {
                 children = new RubyArray(1);
-                he.children = children;
+                he.Children = children;
             }
             children.Add(ele);
-            he2.parent = focus;
+            he2.Parent = focus;
         }
 
         #endregion
@@ -1113,7 +1113,7 @@ namespace IronRuby.Libraries.Hpricot {
                 // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
                 if (sym_cdata.Equals(last.EC) && 
                     (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
-                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.name.GetHashCode())) {
+                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
                     sym = sym_text;
                     tag = MutableString.Create(new String(buf, raw, rawlen));
                 }
@@ -1143,7 +1143,7 @@ namespace IronRuby.Libraries.Hpricot {
                 Hpricot.Element ele = H_ELE<Hpricot.Element>(state, sym, tag, attr, ec, raw, rawlen);
                 ElementData he = ele.GetData<ElementData>();
                 // tag.GetHashCode() ???
-                he.name = tag.GetHashCode();
+                he.Name = tag.GetHashCode();
 
                 if (!state.Xml) {
                     Object match = null;
@@ -1155,7 +1155,7 @@ namespace IronRuby.Libraries.Hpricot {
 
                         if (hee.EC is Hash) {
                             Object has;
-                            if ((hee.EC as Hash).TryGetValue(he.name, out has)) {
+                            if ((hee.EC as Hash).TryGetValue(he.Name, out has)) {
                                 if (has is bool && (bool) has == true) {
                                     if (match == null) {
                                         match = e;
@@ -1171,7 +1171,7 @@ namespace IronRuby.Libraries.Hpricot {
                         }
 
                         //Debug.Assert(he.parent is IHpricotDataContainer, "he.parent is not an IHpricotDataContainer");
-                        e = hee.parent as IHpricotDataContainer;
+                        e = hee.Parent as IHpricotDataContainer;
                     }
 
                     if (match == null) {
@@ -1219,13 +1219,13 @@ namespace IronRuby.Libraries.Hpricot {
                 
                 while (e != state.Doc) {
                     ElementData he = e.GetData<ElementData>();
-                    if (he.name == name) {
+                    if (he.Name == name) {
                         match = e;
                         break;
                     }
 
-                    Debug.Assert(he.parent is Hpricot.Element);
-                    e = he.parent as Hpricot.Element;
+                    Debug.Assert(he.Parent is Hpricot.Element);
+                    e = he.Parent as Hpricot.Element;
                 }
 
                 if (match == null) {
@@ -1236,10 +1236,10 @@ namespace IronRuby.Libraries.Hpricot {
                     Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
                     Debug.Assert(match is Hpricot.Element);
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
-                    he.tag = ele;
-                    Debug.Assert(he.parent is IHpricotDataContainer);
-                    Debug.Assert(he.parent is IHpricotDataContainer);
-                    state.Focus = he.parent as IHpricotDataContainer;
+                    he.Tag = ele;
+                    Debug.Assert(he.Parent is IHpricotDataContainer);
+                    Debug.Assert(he.Parent is IHpricotDataContainer);
+                    state.Focus = he.Parent as IHpricotDataContainer;
                     state.Last = null;
                 }
 
@@ -1274,9 +1274,9 @@ namespace IronRuby.Libraries.Hpricot {
                     ElementData he = (state.Last as Hpricot.Element).GetData<ElementData>();
 
                     Debug.Assert(tag is MutableString);
-                    Debug.Assert(he.tag is MutableString);
+                    Debug.Assert(he.Tag is MutableString);
 
-                    (he.tag as MutableString).Append(tag as MutableString);
+                    (he.Tag as MutableString).Append(tag as MutableString);
                 }
                 else {
                     rb_hpricot_add(state.Focus, H_ELE<Hpricot.Text>(state, sym, tag, attr, ec, raw, rawlen));
