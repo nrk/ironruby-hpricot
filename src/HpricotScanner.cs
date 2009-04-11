@@ -1124,7 +1124,7 @@ namespace IronRuby.Libraries.Hpricot {
 
                 if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
                     // is state.EC really an hash? not sure yet...
-                    Debug.Assert(state.EC is Hash);
+                    Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (state.EC is Hash && (state.EC as Hash).ContainsKey(tag)) {
                         Object tagu = (state.EC as Hash)[tag];
                         // TODO: downcase tag and set state.EC to tag;
@@ -1146,12 +1146,10 @@ namespace IronRuby.Libraries.Hpricot {
             if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym)) { 
                 Hpricot.Element ele = H_ELE<Hpricot.Element>(state, sym, tag, attr, ec, raw, rawlen);
                 ElementData he = ele.GetData<ElementData>();
-                // tag.GetHashCode() ???
                 he.Name = tag.GetHashCode();
 
                 if (!state.Xml) {
                     Object match = null;
-                    //Hpricot.Element e = state.Focus as Hpricot.Element;
                     IHpricotDataContainer e = state.Focus;
 
                     while (e != state.Doc) {
@@ -1174,15 +1172,14 @@ namespace IronRuby.Libraries.Hpricot {
                             }
                         }
 
-                        //Debug.Assert(he.parent is IHpricotDataContainer, "he.parent is not an IHpricotDataContainer");
+                        Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
                         e = hee.Parent as IHpricotDataContainer;
                     }
 
                     if (match == null) {
                         match = state.Focus;
                     }
-                    // hmmm...
-                    //state.Focus = match as IHpricotDataContainer<BasicData>;
+
                     state.Focus = match as IHpricotDataContainer;
                 }
 
@@ -1205,7 +1202,7 @@ namespace IronRuby.Libraries.Hpricot {
                 Object match = null;
                 Hpricot.Element e = state.Focus as Hpricot.Element;
                 if (state.Strict) {
-                    Debug.Assert(state.EC is Hash);
+                    Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (!(state.EC as Hash).ContainsKey(tag)) {
                         tag = MutableString.Create("div");
                     }
@@ -1217,7 +1214,6 @@ namespace IronRuby.Libraries.Hpricot {
                 //
                 // (see also: the search above for fixups)
                 //
-                // tag.GetHashCode() ??
                 name = tag.GetHashCode();
                 
                 while (e != state.Doc) {
@@ -1227,7 +1223,7 @@ namespace IronRuby.Libraries.Hpricot {
                         break;
                     }
 
-                    Debug.Assert(he.Parent is Hpricot.Element);
+                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
                     e = he.Parent as Hpricot.Element;
                 }
 
@@ -1237,13 +1233,13 @@ namespace IronRuby.Libraries.Hpricot {
                 }
                 else {
                     Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
-                    Debug.Assert(match is Hpricot.Element);
+                    Debug.Assert(match is Hpricot.Element, "match is not an instance of Hpricot.Element");
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
 
                     // TODO: couldn't find this in the original implementation but it still sounds right.
                     he.ETag = ele;
 
-                    Debug.Assert(he.Parent is IHpricotDataContainer);
+                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
                     state.Focus = he.Parent as IHpricotDataContainer;
                     state.Last = null;
                 }
@@ -1258,14 +1254,14 @@ namespace IronRuby.Libraries.Hpricot {
             else if (sym_doctype.Equals(sym)) {
                 if (state.Strict) {
                     // TODO: need to check is attr is really an Hash instance
-                    Debug.Assert(attr is Hash);
+                    Debug.Assert(attr is Hash, "attr is not an instance of Hash");
                     (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.Create("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
                     (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.Create("-//W3C//DTD XHTML 1.0 Strict//EN"));
                 }
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.DocumentType>(state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_procins.Equals(sym)) {
-                Debug.Assert(tag is MutableString);
+                Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
                 System.Text.RegularExpressions.Match match = ProcInsParse.Match(tag as MutableString);
                 // TODO: tag is String or MutableString?
                 tag = MutableString.Create(match.Captures[0].Value);
@@ -1275,11 +1271,11 @@ namespace IronRuby.Libraries.Hpricot {
             else if (sym_text.Equals(sym)) {
                 // TODO: add raw_string as well?
                 if (state.Last != null && state.Last is Hpricot.Text) {
-                    Debug.Assert(state.Last is Hpricot.Element);
+                    Debug.Assert(state.Last is Hpricot.Element, "state.Last is not an instance of Hpricot.Element");
                     ElementData he = (state.Last as Hpricot.Element).GetData<ElementData>();
 
-                    Debug.Assert(tag is MutableString);
-                    Debug.Assert(he.Tag is MutableString);
+                    Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
+                    Debug.Assert(he.Tag is MutableString, "he.Tag is not an instance of MutableString");
 
                     (he.Tag as MutableString).Append(tag as MutableString);
                 }
@@ -1313,7 +1309,7 @@ namespace IronRuby.Libraries.Hpricot {
                     if (raw > 0) {
                         raw_string = MutableString.Create(new String(buf, raw, rawlen));
                     }
-                    // NOTE: right before v0.7 the third argument of rb_yield_tokens was yielding raw_string 
+                    // NOTE: right before v0.7 the fourth argument of rb_yield_tokens was yielding raw_string 
                     //       but now it yields null (hardcoded). I still have to understand why, but this 
                     //       might be a way to limit the memory usage of Hpricot given that raw_string was 
                     //       not really that used in userland.
