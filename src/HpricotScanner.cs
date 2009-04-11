@@ -1236,7 +1236,10 @@ namespace IronRuby.Libraries.Hpricot {
                     Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
                     Debug.Assert(match is Hpricot.Element);
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
-                    he.Tag = ele;
+
+                    // TODO: couldn't find this in the original implementation but it still sounds right.
+                    he.ETag = ele;
+
                     Debug.Assert(he.Parent is IHpricotDataContainer);
                     Debug.Assert(he.Parent is IHpricotDataContainer);
                     state.Focus = he.Parent as IHpricotDataContainer;
