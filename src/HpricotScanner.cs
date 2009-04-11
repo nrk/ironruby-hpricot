@@ -1200,7 +1200,8 @@ namespace IronRuby.Libraries.Hpricot {
                 Object match = null;
                 // TODO: need to check if state.Focus is always an Hpricot.Element, but 
                 //       using IHpricotDataContainer might be safer anyway.
-                Hpricot.Element e = state.Focus as Hpricot.Element;
+                //Hpricot.Element e = state.Focus as Hpricot.Element;
+                IHpricotDataContainer e = state.Focus as IHpricotDataContainer;
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (!(state.EC as Hash).ContainsKey(tag)) {
@@ -1218,13 +1219,12 @@ namespace IronRuby.Libraries.Hpricot {
 
                 while (e != state.Doc) {
                     ElementData he = e.GetData<ElementData>();
-                    if (he.Name == name) {
+                    if (he != null && he.Name == name) {
                         match = e;
                         break;
                     }
 
-                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of IHpricotDataContainer");
-                    e = he.Parent as Hpricot.Element;
+                    e = he.Parent as IHpricotDataContainer;
                 }
 
                 if (match == null) {
@@ -1253,7 +1253,7 @@ namespace IronRuby.Libraries.Hpricot {
             }
             else if (sym_doctype.Equals(sym)) {
                 if (state.Strict) {
-                    // TODO: need to check is attr is really an Hash instance
+                    // TODO: need to check if attr is really an Hash instance
                     Debug.Assert(attr is Hash, "attr is not an instance of Hash");
                     (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.Create("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
                     (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.Create("-//W3C//DTD XHTML 1.0 Strict//EN"));
@@ -1262,10 +1262,16 @@ namespace IronRuby.Libraries.Hpricot {
             }
             else if (sym_procins.Equals(sym)) {
                 Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
+
                 System.Text.RegularExpressions.Match match = ProcInsParse.Match(tag as MutableString);
-                // TODO: tag is String or MutableString?
-                tag = MutableString.Create(match.Captures[0].Value);
-                attr = MutableString.Create(match.Captures[1].Value);
+
+                // TODO: are we really sure that checking the number of captures is the right 
+                //       way to handle incomplete procins tokens?
+                if (match.Captures.Count > 1) {
+                    tag = MutableString.Create(match.Captures[0].Value);
+                    attr = MutableString.Create(match.Captures[1].Value);
+                }
+
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
