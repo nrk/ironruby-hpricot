@@ -1184,9 +1184,9 @@ namespace IronRuby.Libraries.Hpricot {
                     // hmmm...
                     //state.Focus = match as IHpricotDataContainer<BasicData>;
                     state.Focus = match as IHpricotDataContainer;
-
-                    rb_hpricot_add(state.Focus, ele);
                 }
+
+                rb_hpricot_add(state.Focus, ele);
 
                 //
                 // in the case of a start tag that should be empty, just
