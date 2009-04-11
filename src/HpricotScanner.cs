@@ -1433,7 +1433,7 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region main parser entry point
 
-        public Object Scan(Object/*!*/ source) {
+        public Object Scan(Object/*!*/ source, Hash /*!*/ options) {
             tag = new Object[1];
             akey = new Object[1];
             aval = new Object[1];
