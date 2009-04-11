@@ -1313,7 +1313,11 @@ namespace IronRuby.Libraries.Hpricot {
                     if (raw > 0) {
                         raw_string = MutableString.Create(new String(buf, raw, rawlen));
                     }
-                    rb_yield_tokens(N, tag[0], attr, raw_string, taint);
+                    // NOTE: right before v0.7 the third argument of rb_yield_tokens was yielding raw_string 
+                    //       but now it yields null (hardcoded). I still have to understand why, but this 
+                    //       might be a way to limit the memory usage of Hpricot given that raw_string was 
+                    //       not really that used in userland.
+                    rb_yield_tokens(N, tag[0], attr, null, taint);
                 }
                 else {
                     rb_hpricot_token(_state, N, tag[0], attr, raw, rawlen, taint);
