@@ -137,6 +137,7 @@ module Hpricot
     def initialize content; self.content = content end
     alias_method :to_s, :content
     alias_method :to_plain_text, :content
+    alias_method :inner_text, :content
     def output(out, opts = {})
       out <<
         if_output(opts) do
