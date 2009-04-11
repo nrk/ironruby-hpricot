@@ -1168,7 +1168,9 @@ namespace IronRuby.Libraries.Hpricot {
                             }
                         }
 
-                        Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
+                        if (he.Parent != null) {
+                            Debug.Assert(he.Parent is IHpricotDataContainer, "he.Parent is not an instance of IHpricotDataContainer");
+                        }
                         e = hee.Parent as IHpricotDataContainer;
                     }
 
@@ -1196,6 +1198,8 @@ namespace IronRuby.Libraries.Hpricot {
             else if (sym_etag.Equals(sym)) {
                 int name;
                 Object match = null;
+                // TODO: need to check if state.Focus is always an Hpricot.Element, but 
+                //       using IHpricotDataContainer might be safer anyway.
                 Hpricot.Element e = state.Focus as Hpricot.Element;
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
@@ -1211,7 +1215,7 @@ namespace IronRuby.Libraries.Hpricot {
                 // (see also: the search above for fixups)
                 //
                 name = tag.GetHashCode();
-                
+
                 while (e != state.Doc) {
                     ElementData he = e.GetData<ElementData>();
                     if (he.Name == name) {
@@ -1219,7 +1223,7 @@ namespace IronRuby.Libraries.Hpricot {
                         break;
                     }
 
-                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
+                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of IHpricotDataContainer");
                     e = he.Parent as Hpricot.Element;
                 }
 
@@ -1229,13 +1233,13 @@ namespace IronRuby.Libraries.Hpricot {
                 }
                 else {
                     Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
-                    Debug.Assert(match is Hpricot.Element, "match is not an instance of Hpricot.Element");
+                    Debug.Assert(match is IHpricotDataContainer, "match is not an instance of IHpricotDataContainer");
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
 
                     // TODO: couldn't find this in the original implementation but it still sounds right.
                     he.ETag = ele;
 
-                    Debug.Assert(he.Parent is Hpricot.Element, "he.Parent is not an instance of Hpricot.Element");
+                    Debug.Assert(he.Parent is IHpricotDataContainer, "he.Parent is not an instance of IHpricotDataContainer");
                     state.Focus = he.Parent as IHpricotDataContainer;
                     state.Last = null;
                 }
@@ -1267,8 +1271,7 @@ namespace IronRuby.Libraries.Hpricot {
             else if (sym_text.Equals(sym)) {
                 // TODO: add raw_string as well?
                 if (state.Last != null && state.Last is Hpricot.Text) {
-                    Debug.Assert(state.Last is Hpricot.Element, "state.Last is not an instance of Hpricot.Element");
-                    ElementData he = (state.Last as Hpricot.Element).GetData<ElementData>();
+                    BasicData he = (state.Last as IHpricotDataContainer).GetData<BasicData>();
 
                     Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
                     Debug.Assert(he.Tag is MutableString, "he.Tag is not an instance of MutableString");
