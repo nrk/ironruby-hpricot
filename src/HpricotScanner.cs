@@ -1001,10 +1001,6 @@ namespace IronRuby.Libraries.Hpricot {
         
         #region mimic a few ruby core APIs
 
-        private static MutableString rb_str_new2(String s) {
-            return MutableString.Create(s);
-        }
-
         private static Object rb_hash_lookup(Hash hash, Object key) {
             Object value;
             return hash.TryGetValue(key, out value) ? value : null;
