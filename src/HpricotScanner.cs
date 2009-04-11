@@ -44,7 +44,11 @@ namespace IronRuby.Libraries.Hpricot {
         private static Object sym_CDATA = SymbolTable.StringToId("CDATA");
 
         private static Object symAllow = SymbolTable.StringToId("allow");
-        private static Object symDeny = SymbolTable.StringToId("deny");          
+        private static Object symDeny = SymbolTable.StringToId("deny");
+
+        private static SymbolId _optXml = SymbolTable.StringToId("xml");
+        private static SymbolId _optFixupTags = SymbolTable.StringToId("fixup_tags");
+        private static SymbolId _optXhtmlStrict = SymbolTable.StringToId("xhtml_strict");
 
         #endregion
 
@@ -1191,7 +1195,6 @@ namespace IronRuby.Libraries.Hpricot {
                 //
                 if (sym_stag.Equals(sym)) {
                     if (state.Xml || !sym_EMPTY.Equals(ec)) {
-                        //state.Focus = ele as IHpricotDataContainer<BasicData>;
                         state.Focus = ele as IHpricotDataContainer;
                         state.Last = null;
                     }
@@ -1240,7 +1243,6 @@ namespace IronRuby.Libraries.Hpricot {
                     // TODO: couldn't find this in the original implementation but it still sounds right.
                     he.ETag = ele;
 
-                    Debug.Assert(he.Parent is IHpricotDataContainer);
                     Debug.Assert(he.Parent is IHpricotDataContainer);
                     state.Focus = he.Parent as IHpricotDataContainer;
                     state.Last = null;
@@ -1461,9 +1463,9 @@ namespace IronRuby.Libraries.Hpricot {
                 Hpricot.Document doc = new Hpricot.Document();
                 state.Doc = doc;
                 state.Focus = state.Doc as IHpricotDataContainer;
-                state.Xml = false;
-                state.Strict = false;
-                state.Fixup = false;
+                state.Xml = OPT(options, _optXml);
+                state.Strict = OPT(options, _optXhtmlStrict);
+                state.Fixup = OPT(options, _optFixupTags);
                 if (state.Strict) {
                     state.Fixup = true;
                 }
