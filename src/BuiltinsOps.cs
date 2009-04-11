@@ -10,8 +10,11 @@ namespace IronRuby.Libraries.Hpricot {
     public static class MutableStringOps {
         [RubyMethod("fast_xs")]
         public static MutableString FastXs(RubyContext/*!*/ context, MutableString/*!*/ self) {
-            StringBuilder builder = new StringBuilder((int)(self.Length * 1.5));
-            Entities.XML.Escape(builder, self.ToString());
+            // NOTE: we need to convert self to an UTF-8 System::String but self.ToString() returns 
+            //       an ASCII-encoded string because self is binary.
+            String utf8String = Encoding.UTF8.GetString(self.ToByteArray());
+            StringBuilder builder = new StringBuilder((int)(utf8String.Length * 1.5));
+            Entities.XML.Escape(builder, utf8String);
             return MutableString.Create(builder.ToString());
         }
     }
