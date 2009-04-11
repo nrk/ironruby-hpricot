@@ -98,6 +98,11 @@ namespace IronRuby.Libraries.Hpricot {
 
     public class Entities {
         #region fields 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private EntityMap _map;
 
         /// <summary>
         /// The set of entities supported by standard XML.
@@ -113,12 +118,6 @@ namespace IronRuby.Libraries.Hpricot {
         /// The set of entities supported by standard HTML 4.0.
         /// </summary>
         private static readonly Entities _html40Entities;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private static readonly EntityMap _map;
-
 
         private static readonly String[,] BASIC_ARRAY = {
             {"quot", "34"},     // " - double-quote
@@ -431,7 +430,13 @@ namespace IronRuby.Libraries.Hpricot {
         };
 
         #endregion
-        
+
+        #region constructors 
+
+        public Entities() {
+            _map = new LookupEntityMap();
+        }
+
         static Entities() {
             _xmlEntities = new Entities();
             _xmlEntities.AddEntities(BASIC_ARRAY);
@@ -445,11 +450,11 @@ namespace IronRuby.Libraries.Hpricot {
             _html40Entities.AddEntities(BASIC_ARRAY);
             _html40Entities.AddEntities(ISO8859_1_ARRAY);
             _html40Entities.AddEntities(HTML40_ARRAY);
-
-            _map = new LookupEntityMap();
         }
-        
-        #region properties 
+
+        #endregion
+
+        #region properties
 
         public static Entities XML { 
             get { return _xmlEntities; } 
