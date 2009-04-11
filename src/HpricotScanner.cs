@@ -1631,15 +1631,15 @@ namespace IronRuby.Libraries.Hpricot {
                                 break;
                             case 7: { SET(akey, p); }
                                 break;
-                            case 8: { SET(aval, p); ATTR(rb_str_new2("version"), aval); }
+                            case 8: { SET(aval, p); ATTR(SymbolTable.StringToId("version"), aval); }
                                 break;
-                            case 9: { SET(aval, p); ATTR(rb_str_new2("encoding"), aval); }
+                            case 9: { SET(aval, p); ATTR(SymbolTable.StringToId("encoding"), aval); }
                                 break;
-                            case 10: { SET(aval, p); ATTR(rb_str_new2("standalone"), aval); }
+                            case 10: { SET(aval, p); ATTR(SymbolTable.StringToId("standalone"), aval); }
                                 break;
-                            case 11: { SET(aval, p); ATTR(rb_str_new2("public_id"), aval); }
+                            case 11: { SET(aval, p); ATTR(SymbolTable.StringToId("public_id"), aval); }
                                 break;
-                            case 12: { SET(aval, p); ATTR(rb_str_new2("system_id"), aval); }
+                            case 12: { SET(aval, p); ATTR(SymbolTable.StringToId("system_id"), aval); }
                                 break;
                             case 13: {
                                     akey[0] = null;
