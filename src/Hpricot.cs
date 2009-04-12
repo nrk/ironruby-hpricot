@@ -330,15 +330,13 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(ETag/*!*/ self) {
-                Debug.Assert(self._data.Tag is AttributeData, "self._data.Tag is not an instance of AttributeData");
-                Debug.Assert(self._data.Tag is MutableString, "self._data.Tag.Attr is not an instance of MutableString");
-
-                // TODO: hmm, I'm not really sure of this...
+                Debug.Assert(self._data is AttributeData, "self._data is not an instance of AttributeData");
                 return (self._data as AttributeData).Attr as MutableString;
             }
 
             [RubyMethod("clear_raw")]
             public static bool ClearRaw(ETag/*!*/ self) {
+                Debug.Assert(self._data is AttributeData, "self._data is not an instance of AttributeData");
                 (self._data as AttributeData).Attr = null;
                 return true;
             }
