@@ -8,7 +8,7 @@ namespace IronRuby.Libraries.Hpricot {
         private IHpricotDataContainer _doc;
         private IHpricotDataContainer _focus;
         private IHpricotDataContainer _last;
-        private Object _EC;
+        private Hash _ec;
         private bool _xml;
         private bool _strict;
         private bool _fixup;
@@ -42,9 +42,9 @@ namespace IronRuby.Libraries.Hpricot {
             set { _last = value; }
         }
 
-        public Object EC {
-            get { return _EC; }
-            set { _EC = value; }
+        public Hash EC {
+            get { return _ec; }
+            set { _ec = value; }
         }
 
         public bool Xml {

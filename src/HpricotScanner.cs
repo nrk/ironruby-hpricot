@@ -1125,12 +1125,11 @@ namespace IronRuby.Libraries.Hpricot {
 
                 if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
-                    if ((state.EC as Hash).ContainsKey(tag)) {
-                        ec = rb_hash_lookup(state.EC as Hash, tag);
+                    if (state.EC.ContainsKey(tag)) {
+                        ec = rb_hash_lookup(state.EC, tag);
                     }
                     else {
-                        //Object tagu = (state.EC as Hash)[tag];
-                        ec = rb_hash_aref(state.EC as Hash, IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString));
+                        ec = rb_hash_aref(state.EC, IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString));
                     }
 
                     if (ec != null) {
@@ -1213,7 +1212,7 @@ namespace IronRuby.Libraries.Hpricot {
                 IHpricotDataContainer e = state.Focus as IHpricotDataContainer;
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
-                    if (!(state.EC as Hash).ContainsKey(tag)) {
+                    if (!state.EC.ContainsKey(tag)) {
                         tag = MutableString.Create("div");
                     }
                 }
