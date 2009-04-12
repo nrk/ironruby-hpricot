@@ -5,7 +5,6 @@ namespace IronRuby.Libraries.Hpricot {
     #region BasicData 
 
     public class BasicData {
-        // TODO: MutableString
         private Object _tag;
         private Object _parent;
 

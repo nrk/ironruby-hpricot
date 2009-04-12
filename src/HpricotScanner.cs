@@ -1006,6 +1006,11 @@ namespace IronRuby.Libraries.Hpricot {
             return hash.TryGetValue(key, out value) ? value : null;
         }
 
+        private static Object rb_hash_aref(Hash hash, Object key) {
+            Object value;
+            return hash.TryGetValue(key, out value) ? value : hash.DefaultValue;
+        }
+
         #endregion
 
         #region miscellaneous methods
@@ -1120,19 +1125,24 @@ namespace IronRuby.Libraries.Hpricot {
 
                 if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
-                    if (state.EC is Hash && (state.EC as Hash).ContainsKey(tag)) {
-                        Object tagu = (state.EC as Hash)[tag];
-                        // TODO: downcase tag and set state.EC to tag;
+                    if ((state.EC as Hash).ContainsKey(tag)) {
+                        ec = rb_hash_lookup(state.EC as Hash, tag);
+                    }
+                    else {
+                        //Object tagu = (state.EC as Hash)[tag];
+                        ec = rb_hash_aref(state.EC as Hash, IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString));
                     }
 
-                    if (sym_emptytag.Equals(sym)) {
-                        if (sym_EMPTY.Equals(ec)) {
-                            sym = sym_stag;
+                    if (ec != null) {
+                        if (sym_emptytag.Equals(sym)) {
+                            if (!sym_EMPTY.Equals(ec)) {
+                                sym = sym_stag;
+                            }
                         }
-                    }
-                    else if (sym_stag.Equals(sym)) {
-                        if (sym_EMPTY.Equals(ec)) {
-                            sym = sym_emptytag;
+                        else if (sym_stag.Equals(sym)) {
+                            if (sym_EMPTY.Equals(ec)) {
+                                sym = sym_emptytag;
+                            }
                         }
                     }
                 }
@@ -1442,7 +1452,7 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region main parser entry point
 
-        public Object Scan(Object/*!*/ source, Hash /*!*/ options) {
+        public Object Scan(Object/*!*/ source, Hash/*!*/ options, Hash/*!*/ elementContent) {
             tag = new Object[1];
             akey = new Object[1];
             aval = new Object[1];
@@ -1475,7 +1485,7 @@ namespace IronRuby.Libraries.Hpricot {
                 }
 
                 //rb_ivar_set(S->doc, rb_intern("@options"), opts);
-                state.EC = new Hash(_currentContext);
+                state.EC = elementContent;
                 _state = state;
             }
 

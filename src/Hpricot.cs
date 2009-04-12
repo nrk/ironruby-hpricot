@@ -29,9 +29,15 @@ namespace IronRuby.Libraries.Hpricot {
         public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 
             RubyContext/*!*/ context, BlockParam block, RubyModule/*!*/ self, Object/*!*/ source, Hash/*!*/ options) {
 
+            // TODO: improve me please!
+            Object elementContent;
+            if (!self.TryResolveConstantNoAutoload("ElementContent", out elementContent) && !(elementContent is Hash)) {
+                throw new Exception("Hpricot::ElementContent is missing or it is not an Hash");
+            }
+
             //NOTE: block can be null as of Hpricot 0.7, see HpricotScanner.ELE
             HpricotScanner scanner = new HpricotScanner(respondsTo, toMutableStringStorage, context, block);
-            return scanner.Scan(source, options);
+            return scanner.Scan(source, options, elementContent as Hash);
         }
 
         [RubyMethod("css", RubyMethodAttributes.PublicSingleton)]
