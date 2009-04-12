@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Diagnostics;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
 using Microsoft.Scripting;
@@ -98,7 +99,7 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(BaseElement/*!*/ self) {
-                return self._data.Tag as MutableString;
+                return self._data.Tag != null ? self._data.Tag as MutableString : MutableString.Empty;
             }
 
             [RubyMethod("parent")]
@@ -260,12 +261,12 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static Object GetRawString(Element/*!*/ self) {
-                return (self._data.Tag as BaseElement).GetData<BasicData>().Tag;
+                return (self._data as ElementData).Raw;
             }
 
             [RubyMethod("clear_raw")]
             public static bool ClearRaw(Element/*!*/ self) {
-                self._data.Tag = null;
+                (self._data as ElementData).Raw = null;
                 return true;
             }
 
@@ -329,6 +330,9 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(ETag/*!*/ self) {
+                Debug.Assert(self._data.Tag is AttributeData, "self._data.Tag is not an instance of AttributeData");
+                Debug.Assert(self._data.Tag is MutableString, "self._data.Tag.Attr is not an instance of MutableString");
+
                 // TODO: hmm, I'm not really sure of this...
                 return (self._data as AttributeData).Attr as MutableString;
             }

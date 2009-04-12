@@ -1038,7 +1038,7 @@ namespace IronRuby.Libraries.Hpricot {
                 he.Attr = attr;
                 he.EC = ec;
 
-                if (raw > 0 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
+                if (raw > -1 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
                     he.Raw = MutableString.Create(new String(buf, raw, rawlen));
                 }
             }
@@ -1047,7 +1047,7 @@ namespace IronRuby.Libraries.Hpricot {
 
                 ha.Tag = tag;
                 if (ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
-                    if (raw > 0) {
+                    if (raw > -1) {
                         ha.Attr = MutableString.Create(new String(buf, raw, rawlen));
                     }
                 }
@@ -1119,7 +1119,6 @@ namespace IronRuby.Libraries.Hpricot {
                 }
 
                 if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
-                    // is state.EC really an hash? not sure yet...
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (state.EC is Hash && (state.EC as Hash).ContainsKey(tag)) {
                         Object tagu = (state.EC as Hash)[tag];
@@ -1299,7 +1298,7 @@ namespace IronRuby.Libraries.Hpricot {
 
         private void ELE(Object N) {
             if (te > ts || text) {
-                int raw = 0;
+                int raw = -1;
                 int rawlen = 0;
                 ele_open = false;
                 text = false;
