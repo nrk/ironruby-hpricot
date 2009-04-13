@@ -502,22 +502,22 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("content")]
             public static MutableString GetContent(ProcedureInstruction/*!*/ self) {
-                return self._data.Tag as MutableString;
+                return (self._data as AttributeData).Attr as MutableString;
             }
 
             [RubyMethod("content=")]
             public static void SetContent(ProcedureInstruction/*!*/ self, Object/*!*/ content) {
-                self._data.Tag = content;
+                (self._data as AttributeData).Attr = content;
             }
 
             [RubyMethod("target")]
             public static Object GetTarget(ProcedureInstruction/*!*/ self) {
-                return (self._data as AttributeData).Attr;
+                return self._data.Tag;
             }
 
             [RubyMethod("target=")]
             public static void SetTarget(ProcedureInstruction/*!*/ self, Object/*!*/ target) {
-                (self._data as AttributeData).Attr = target;
+                self._data.Tag = target;
             }
         }
 

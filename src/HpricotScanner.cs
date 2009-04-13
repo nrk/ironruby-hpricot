@@ -18,7 +18,7 @@ namespace IronRuby.Libraries.Hpricot {
         private static String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
 
         private static Int32? _bufferSize;
-        private static readonly RubyRegex _procInsParse = new RubyRegex("\\A<\\?(\\S+)\\s+(.+)", RubyRegexOptions.Multiline);
+        private static readonly RubyRegex _procInsParse = new RubyRegex(@"\A<\?(\S+)\s+(.+)", RubyRegexOptions.Multiline);
 
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
@@ -1273,13 +1273,10 @@ namespace IronRuby.Libraries.Hpricot {
 
                 System.Text.RegularExpressions.Match match = ProcInsParse.Match(tag as MutableString);
 
-                // TODO: are we really sure that checking the number of captures is the right 
-                //       way to handle incomplete procins tokens?
-                if (match.Captures.Count > 1) {
-                    tag = MutableString.Create(match.Captures[0].Value);
-                    attr = MutableString.Create(match.Captures[1].Value);
-                }
+                Debug.Assert(match.Success && match.Groups.Count == 3, "ProcInsParse failed to parse procins");
 
+                tag = MutableString.Create(match.Groups[1].Value);
+                attr = MutableString.Create(match.Groups[2].Value);
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
