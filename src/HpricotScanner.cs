@@ -1406,7 +1406,7 @@ namespace IronRuby.Libraries.Hpricot {
                 if (attr == null) {
                     attr = new Hash(_currentContext);
                 }
-                (attr as Hash).Add(K, V);
+                (attr as Hash)[K] = V;
             }
         }
 
