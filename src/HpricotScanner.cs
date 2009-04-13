@@ -1115,14 +1115,6 @@ namespace IronRuby.Libraries.Hpricot {
             if (!state.Xml) {
                 ElementData last = state.Focus.GetData<ElementData>();
 
-                // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
-                if (sym_cdata.Equals(last.EC) && 
-                    (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
-                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
-                    sym = sym_text;
-                    tag = MutableString.Create(new String(buf, raw, rawlen));
-                }
-
                 if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym)) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (state.EC.ContainsKey(tag)) {
@@ -1131,17 +1123,25 @@ namespace IronRuby.Libraries.Hpricot {
                     else {
                         ec = rb_hash_aref(state.EC, IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString));
                     }
+                }
 
-                    if (ec != null) {
-                        if (sym_emptytag.Equals(sym)) {
-                            if (!sym_EMPTY.Equals(ec)) {
-                                sym = sym_stag;
-                            }
+                // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
+                if (sym_cdata.Equals(last.EC) && 
+                    (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
+                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
+                    sym = sym_text;
+                    tag = MutableString.Create(new String(buf, raw, rawlen));
+                }
+
+                if (ec != null) {
+                    if (sym_emptytag.Equals(sym)) {
+                        if (!sym_EMPTY.Equals(ec)) {
+                            sym = sym_stag;
                         }
-                        else if (sym_stag.Equals(sym)) {
-                            if (sym_EMPTY.Equals(ec)) {
-                                sym = sym_emptytag;
-                            }
+                    }
+                    else if (sym_stag.Equals(sym)) {
+                        if (sym_EMPTY.Equals(ec)) {
+                            sym = sym_emptytag;
                         }
                     }
                 }
