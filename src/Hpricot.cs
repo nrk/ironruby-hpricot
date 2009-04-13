@@ -404,9 +404,9 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("XMLDecl", Inherits = typeof(BaseElement))]
         public class XmlDeclaration : BaseElement {
-            private static readonly MutableString _encoding = MutableString.Create("encoding");
-            private static readonly MutableString _standalone = MutableString.Create("standalone");
-            private static readonly MutableString _version = MutableString.Create("version");
+            private static readonly SymbolId _encoding = SymbolTable.StringToId("encoding");
+            private static readonly SymbolId _standalone = SymbolTable.StringToId("standalone");
+            private static readonly SymbolId _version = SymbolTable.StringToId("version");
 
             public XmlDeclaration() : this(new AttributeData()) { }
 
