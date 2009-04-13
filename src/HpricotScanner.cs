@@ -1121,7 +1121,8 @@ namespace IronRuby.Libraries.Hpricot {
                         ec = rb_hash_lookup(state.EC, tag);
                     }
                     else {
-                        ec = rb_hash_aref(state.EC, IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString));
+                        tag = IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString);
+                        ec = rb_hash_aref(state.EC, tag);
                     }
                 }
 
