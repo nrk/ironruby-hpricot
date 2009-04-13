@@ -14,6 +14,9 @@ String#fast_xs internals are based on Ola Bini's code ported to C#.
 You can find the latest builds of ironruby-hpricot at the following URL:
 http://github.com/nrk/ironruby-hpricot/downloads
 
+You can find a fairly updated report of the pass rate for the official test 
+suite at the following URL: http://gist.github.com/93723
+
 Want to help or contribute? Drop me a mail to suppakilla@gmail.com
 
 NOTE: this is still a work in progress, see the TODO for more information.
