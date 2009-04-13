@@ -1481,8 +1481,10 @@ namespace IronRuby.Libraries.Hpricot {
                     state.Fixup = true;
                 }
 
-                //rb_ivar_set(S->doc, rb_intern("@options"), opts);
                 state.EC = elementContent;
+
+                _currentContext.SetInstanceVariable(state.Doc, "@options", options);
+
                 _state = state;
             }
 
