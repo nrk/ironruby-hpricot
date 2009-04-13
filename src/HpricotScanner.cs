@@ -1127,7 +1127,7 @@ namespace IronRuby.Libraries.Hpricot {
                 }
 
                 // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
-                if (sym_cdata.Equals(last.EC) && 
+                if (sym_CDATA.Equals(last.EC) && 
                     (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
                     !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
                     sym = sym_text;
