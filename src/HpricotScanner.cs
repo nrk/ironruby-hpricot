@@ -10,7 +10,7 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
 namespace IronRuby.Libraries.Hpricot {
-    using RubyIOReadCallSite = CallSite<Func<CallSite, RubyContext, Object, Int32, MutableString>>;
+    using RubyIOReadCallSite = CallSite<Func<CallSite, Object, Object, Object>>;
 
     public class HpricotScanner {
         #region fields - miscellaneous
@@ -24,6 +24,7 @@ namespace IronRuby.Libraries.Hpricot {
         private BlockParam/*!*/ _blockParam;
         private RespondToStorage/*!*/ _respondToStorage;
         private ConversionStorage<MutableString> _toMutableString;
+        private BinaryOpStorage _readIOStorage;
 
         private ScannerState _state;
 
@@ -976,10 +977,11 @@ namespace IronRuby.Libraries.Hpricot {
         #region constructors 
 
         public HpricotScanner(RespondToStorage/*!*/ respondToStorage, ConversionStorage<MutableString>/*!*/ toMutableString, 
-            RubyContext/*!*/ context, BlockParam block) {
+            BinaryOpStorage/*!*/ readIOStorage, BlockParam block) {
+            _currentContext = respondToStorage.Context;
             _respondToStorage = respondToStorage;
             _toMutableString = toMutableString;
-            _currentContext = context;
+            _readIOStorage = readIOStorage;
             _blockParam = block;
         }
 
@@ -1458,9 +1460,9 @@ namespace IronRuby.Libraries.Hpricot {
 
             bool sourceRespondsToRead = Protocols.RespondTo(_respondToStorage, source, "read");
 
-            RubyIOReadCallSite readCallSite = null;
+            RubyIOReadCallSite readIOCallSite = null;
             if (sourceRespondsToRead) {
-                readCallSite = RubyIOReadCallSite.Create(RubyCallAction.Make(_currentContext, "read", 3));
+                readIOCallSite = _readIOStorage.GetCallSite("read", 1);
             }
             else if (Protocols.RespondTo(_respondToStorage, source, "to_str")) {
                 source = Protocols.CastToString(_toMutableString, source);
@@ -1511,7 +1513,7 @@ namespace IronRuby.Libraries.Hpricot {
 
                 char[] chars;
                 if (sourceRespondsToRead) {
-                    chars = BinaryEncoding.Instance.GetChars(readCallSite.Target(readCallSite, _currentContext, source, space).ToByteArray());
+                    chars = BinaryEncoding.Instance.GetChars((readIOCallSite.Target(readIOCallSite, source, space) as MutableString).ToByteArray());
                 }
                 else {
                     MutableString str = source as MutableString;
