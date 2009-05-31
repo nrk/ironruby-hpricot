@@ -105,7 +105,7 @@ namespace IronRuby.Libraries.Hpricot {
 
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(BaseElement/*!*/ self) {
-                return self._data.Tag != null ? self._data.Tag as MutableString : MutableString.Empty;
+                return self._data.Tag != null ? self._data.Tag as MutableString : MutableString.CreateEmpty();
             }
 
             [RubyMethod("parent")]

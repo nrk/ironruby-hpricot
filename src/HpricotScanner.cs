@@ -1337,7 +1337,7 @@ namespace IronRuby.Libraries.Hpricot {
         private void SET(Object[] N, int E) {
             if (N == tag) {
                 if (mark_tag == -1 || E == mark_tag) {
-                    tag[0] = MutableString.Empty;
+                    tag[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_tag) {
                     tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag));
@@ -1345,7 +1345,7 @@ namespace IronRuby.Libraries.Hpricot {
             }
             else if (N == akey) {
                 if (mark_akey == -1 || E == mark_akey) {
-                    akey[0] = MutableString.Empty;
+                    akey[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_akey) {
                     akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey));
@@ -1353,7 +1353,7 @@ namespace IronRuby.Libraries.Hpricot {
             }
             else if (N == aval) {
                 if (mark_aval == -1 || E == mark_aval) {
-                    aval[0] = MutableString.Empty;
+                    aval[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_aval) {
                     aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval));
