@@ -979,7 +979,7 @@ namespace IronRuby.Libraries.Hpricot {
         #region mimic a few ruby core APIs
 
         private static MutableString rb_str_new2(String s) {
-            return MutableString.Create(s);
+            return MutableString.Create(s, RubyEncoding.Binary);
         }
 
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
@@ -1015,7 +1015,7 @@ namespace IronRuby.Libraries.Hpricot {
                 text = false;
 
                 if (ts != -1 && N != cdata && N != sym_text && N != procins && N != comment) {
-                    raw_string = MutableString.Create(new String(buf, ts, te - ts));
+                    raw_string = MutableString.Create(new String(buf, ts, te - ts), RubyEncoding.Binary);
                 }
 
                 rb_yield_tokens(N, tag[0], attr, raw_string, taint);
@@ -1028,7 +1028,7 @@ namespace IronRuby.Libraries.Hpricot {
                     tag[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_tag) {
-                    tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag));
+                    tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag), RubyEncoding.Binary);
                 }
             }
             else if (N == akey) {
@@ -1036,7 +1036,7 @@ namespace IronRuby.Libraries.Hpricot {
                     akey[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_akey) {
-                    akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey));
+                    akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey), RubyEncoding.Binary);
                 }
             }
             else if (N == aval) {
@@ -1044,7 +1044,7 @@ namespace IronRuby.Libraries.Hpricot {
                     aval[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_aval) {
-                    aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval));
+                    aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval), RubyEncoding.Binary);
                 }
             }
         }
