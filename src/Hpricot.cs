@@ -181,8 +181,8 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("DocType", Inherits = typeof(BaseElement))]
         public class DocumentType : BaseElement {
-            private static readonly MutableString _systemId = MutableString.Create("system_id");
-            private static readonly MutableString _publicId = MutableString.Create("public_id");
+            private static readonly MutableString _systemId = MutableString.CreateAscii("system_id");
+            private static readonly MutableString _publicId = MutableString.CreateAscii("public_id");
 
             public DocumentType() : this(new AttributeData()) { }
 

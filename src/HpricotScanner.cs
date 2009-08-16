@@ -1046,7 +1046,7 @@ namespace IronRuby.Libraries.Hpricot {
                 he.EC = ec;
 
                 if (raw > -1 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
-                    he.Raw = MutableString.Create(new String(buf, raw, rawlen));
+                    he.Raw = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
                 }
             }
             else if (ele is Hpricot.DocumentType || ele is Hpricot.ProcedureInstruction || ele is Hpricot.XmlDeclaration || ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
@@ -1055,7 +1055,7 @@ namespace IronRuby.Libraries.Hpricot {
                 ha.Tag = tag;
                 if (ele is Hpricot.ETag || ele is Hpricot.BogusETag) {
                     if (raw > -1) {
-                        ha.Attr = MutableString.Create(new String(buf, raw, rawlen));
+                        ha.Attr = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
                     }
                 }
                 else {
@@ -1133,7 +1133,7 @@ namespace IronRuby.Libraries.Hpricot {
                     (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
                     !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
                     sym = sym_text;
-                    tag = MutableString.Create(new String(buf, raw, rawlen));
+                    tag = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
                 }
 
                 if (ec != null) {
@@ -1216,7 +1216,7 @@ namespace IronRuby.Libraries.Hpricot {
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (!state.EC.ContainsKey(tag)) {
-                        tag = MutableString.Create("div");
+                        tag = MutableString.CreateAscii("div");
                     }
                 }
 
@@ -1266,8 +1266,8 @@ namespace IronRuby.Libraries.Hpricot {
                 if (state.Strict) {
                     // TODO: need to check if attr is really an Hash instance
                     Debug.Assert(attr is Hash, "attr is not an instance of Hash");
-                    (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.Create("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
-                    (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.Create("-//W3C//DTD XHTML 1.0 Strict//EN"));
+                    (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.CreateAscii("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
+                    (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.CreateAscii("-//W3C//DTD XHTML 1.0 Strict//EN"));
                 }
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.DocumentType>(state, sym, tag, attr, ec, raw, rawlen));
             }
@@ -1278,8 +1278,8 @@ namespace IronRuby.Libraries.Hpricot {
 
                 Debug.Assert(match.Success && match.Groups.Count == 3, "ProcInsParse failed to parse procins");
 
-                tag = MutableString.Create(match.Groups[1].Value);
-                attr = MutableString.Create(match.Groups[2].Value);
+                tag = MutableString.CreateAscii(match.Groups[1].Value);
+                attr = MutableString.CreateAscii(match.Groups[2].Value);
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
@@ -1320,7 +1320,7 @@ namespace IronRuby.Libraries.Hpricot {
                 if (_blockParam != null) {
                     MutableString raw_string = null;
                     if (raw > 0) {
-                        raw_string = MutableString.Create(new String(buf, raw, rawlen));
+                        raw_string = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
                     }
                     // NOTE: right before v0.7 the fourth argument of rb_yield_tokens was yielding raw_string 
                     //       but now it yields null (hardcoded). I still have to understand why, but this 
@@ -1340,7 +1340,7 @@ namespace IronRuby.Libraries.Hpricot {
                     tag[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_tag) {
-                    tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag));
+                    tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag), RubyEncoding.Binary);
                 }
             }
             else if (N == akey) {
@@ -1348,7 +1348,7 @@ namespace IronRuby.Libraries.Hpricot {
                     akey[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_akey) {
-                    akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey));
+                    akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey), RubyEncoding.Binary);
                 }
             }
             else if (N == aval) {
@@ -1356,7 +1356,7 @@ namespace IronRuby.Libraries.Hpricot {
                     aval[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_aval) {
-                    aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval));
+                    aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval), RubyEncoding.Binary);
                 }
             }
         }
