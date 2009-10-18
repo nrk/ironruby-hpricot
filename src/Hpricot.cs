@@ -31,7 +31,7 @@ namespace IronRuby.Libraries.Hpricot {
 
             // TODO: improve me please!
             Object elementContent;
-            if (!self.TryResolveConstantNoAutoload("ElementContent", out elementContent) && !(elementContent is Hash)) {
+            if (!self.TryGetConstant(null, "ElementContent", out elementContent) && !(elementContent is Hash)) {
                 throw new Exception("Hpricot::ElementContent is missing or it is not an Hash");
             }
 

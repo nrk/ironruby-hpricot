@@ -50,10 +50,6 @@
       <Project>{2AE75F5A-CD1F-4925-9647-AF4D1C282FB4}</Project>
       <Name>Microsoft.Scripting.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Main\Runtime\Microsoft.Scripting\Microsoft.Scripting.csproj">
-      <Project>{EB66B766-6354-4208-A3D4-AACBDCB5C3B3}</Project>
-      <Name>Microsoft.Scripting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Main\Languages\Ruby\Libraries.LCA_RESTRICTED\IronRuby.Libraries.csproj">
       <Project>{77323B06-15A2-4CF4-8A7A-86EAA2B66498}</Project>
       <Name>IronRuby.Libraries</Name>
@@ -61,6 +57,14 @@
     <ProjectReference Include="..\..\..\..\..\Main\Languages\Ruby\Ruby\Ruby.csproj">
       <Project>{7F6984B4-EE6D-4E6F-ABB1-E210D7DC4FDD}</Project>
       <Name>Ruby</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Main\Runtime\Microsoft.Dynamic\Microsoft.Dynamic.csproj">
+      <Project>{EB66B766-6354-4208-A3D4-AACBDCB5C3B3}</Project>
+      <Name>Microsoft.Dynamic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Main\Runtime\Microsoft.Scripting\Microsoft.Scripting.csproj">
+      <Project>{02FF0909-F5AD-48CF-A86A-345E721B7E40}</Project>
+      <Name>Microsoft.Scripting</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

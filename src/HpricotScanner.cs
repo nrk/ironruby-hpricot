@@ -7,6 +7,7 @@ using IronRuby.Builtins;
 using IronRuby.Runtime;
 using IronRuby.Runtime.Calls;
 using Microsoft.Scripting;
+using Microsoft.Scripting.Utils;
 using Microsoft.Scripting.Runtime;
 
 namespace IronRuby.Libraries.Hpricot {
@@ -18,7 +19,7 @@ namespace IronRuby.Libraries.Hpricot {
         private static String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
 
         private static Int32? _bufferSize;
-        private static readonly RubyRegex _procInsParse = new RubyRegex(@"\A<\?(\S+)\s+(.+)", RubyRegexOptions.Multiline);
+        private static readonly RubyRegex _procInsParse = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
 
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
@@ -1274,12 +1275,11 @@ namespace IronRuby.Libraries.Hpricot {
             else if (sym_procins.Equals(sym)) {
                 Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
 
-                System.Text.RegularExpressions.Match match = ProcInsParse.Match(tag as MutableString);
+                MatchData match = ProcInsParse.Match(RubyEncoding.Binary, tag as MutableString);
+                Debug.Assert(match.GroupSuccess(0) && match.GroupCount == 3, "ProcInsParse failed to parse procins");
 
-                Debug.Assert(match.Success && match.Groups.Count == 3, "ProcInsParse failed to parse procins");
-
-                tag = MutableString.CreateAscii(match.Groups[1].Value);
-                attr = MutableString.CreateAscii(match.Groups[2].Value);
+                tag = match.GetGroupValue(1);
+                attr = match.GetGroupValue(2);
                 rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
