@@ -1,10 +1,6 @@
 ironruby-hpricot - a port of Hpricot for IronRuby
 ===============================================================================
 
-
-WARNING: the source code in this branch will not build and/or work for a while!
-
-
 Hpricot is a fast and flexible HTML parser, created by why the lucky stiff.
 
 This is a port for IronRuby of Hpricot's parser created by generating C# code 
