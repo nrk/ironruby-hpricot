@@ -5,3 +5,9 @@ module TestFiles
         end
     end
 end
+
+class String
+    unless defined? "".lines
+        alias lines to_a
+    end
+end
