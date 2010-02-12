@@ -103,9 +103,15 @@ namespace IronRuby.Libraries.Hpricot {
                 return _data as T;
             }
 
+            protected virtual MutableString RawString {
+                get {
+                    return _data.Tag != null ? _data.Tag as MutableString : MutableString.CreateEmpty();
+                }
+            }
+
             [RubyMethod("raw_string")]
             public static MutableString GetRawString(BaseElement/*!*/ self) {
-                return self._data.Tag != null ? self._data.Tag as MutableString : MutableString.CreateEmpty();
+                return self.RawString;
             }
 
             [RubyMethod("parent")]
@@ -136,6 +142,12 @@ namespace IronRuby.Libraries.Hpricot {
                 return new CData();
             }
 
+            protected override MutableString RawString {
+                get {
+                    return MutableString.CreateAscii(String.Format("<![CDATA[{0}]]>", GetContent(this)));
+                }
+            }
+
             [RubyMethod("content")]
             public static MutableString GetContent(CData/*!*/ self) {
                 return self._data.Tag as MutableString;
@@ -164,6 +176,12 @@ namespace IronRuby.Libraries.Hpricot {
                 return new Comment();
             }
 
+            protected override MutableString RawString {
+                get {
+                    return MutableString.CreateAscii(String.Format("<!--{0}-->", GetContent(this)));
+                }
+            }
+
             [RubyMethod("content")]
             public static MutableString GetContent(Comment/*!*/ self) {
                 return self._data.Tag as MutableString;
@@ -181,8 +199,8 @@ namespace IronRuby.Libraries.Hpricot {
 
         [RubyClass("DocType", Inherits = typeof(BaseElement))]
         public class DocumentType : BaseElement {
-            private static readonly MutableString _systemId = MutableString.CreateAscii("system_id");
-            private static readonly MutableString _publicId = MutableString.CreateAscii("public_id");
+            private static readonly SymbolId _systemId = SymbolTable.StringToId("system_id");
+            private static readonly SymbolId _publicId = SymbolTable.StringToId("public_id");
 
             public DocumentType() : this(new AttributeData()) { }
 
@@ -193,6 +211,27 @@ namespace IronRuby.Libraries.Hpricot {
             [RubyConstructor]
             public static DocumentType Allocator(RubyClass/*!*/ self) {
                 return new DocumentType();
+            }
+
+            protected override MutableString RawString {
+                get {
+                    MutableString doctype = MutableString.CreateAscii("");
+                    doctype.AppendFormat("<!DOCTYPE {0} ", GetTarget(this));
+
+                    AttributeData data = _data as AttributeData;
+                    if (!data.AttrIsNull) {
+                        object publicId = GetPublicId(this);
+                        doctype.Append(publicId != null ? String.Format("PUBLIC \"{0}\"", publicId) : "SYSTEM");
+
+                        object systemId = GetSystemId(this);
+                        if (systemId != null) {
+                            doctype.AppendFormat(" \"{0}\"", systemId.ToString().Replace("\"", "\\\""));
+                        }
+                    }
+
+                    doctype.Append(">");
+                    return doctype;
+                }
             }
 
             [RubyMethod("target")]
@@ -419,6 +458,29 @@ namespace IronRuby.Libraries.Hpricot {
                 return new XmlDeclaration();
             }
 
+            protected override MutableString RawString {
+                get {
+                    MutableString xmldecl = MutableString.CreateAscii("");
+                    xmldecl.AppendFormat("<?xml version=\"{0}\"", GetVersion(this));
+
+                    AttributeData data = _data as AttributeData;
+                    if (!data.AttrIsNull) {
+                        object encoding = GetEncoding(this);
+                        if (encoding != null) {
+                            xmldecl.AppendFormat(" encoding=\"{0}\"", encoding);
+                        }
+
+                        object standalone = GetStandalone(this);
+                        if (standalone != null) {
+                            xmldecl.AppendFormat(" standalone=\"{0}\"", standalone);
+                        }
+                    }
+
+                    xmldecl.Append("?>");
+                    return xmldecl;
+                }
+            }
+
             [RubyMethod("encoding")]
             public static Object GetEncoding(XmlDeclaration/*!*/ self) {
                 AttributeData data = self._data as AttributeData;
@@ -498,6 +560,12 @@ namespace IronRuby.Libraries.Hpricot {
             [RubyConstructor]
             public static ProcedureInstruction Allocator(RubyClass/*!*/ self) {
                 return new ProcedureInstruction();
+            }
+
+            protected override MutableString RawString {
+                get {
+                    return MutableString.CreateAscii(String.Format("<!--{0}-->", GetContent(this)));
+                }
             }
 
             [RubyMethod("content")]
