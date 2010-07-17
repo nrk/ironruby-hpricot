@@ -32,24 +32,24 @@ namespace IronRuby.Hpricot {
 
         #region fields - hpricot symbols
 
-        private static RubySymbol sym_xmldecl;
-        private static RubySymbol sym_doctype;
-        private static RubySymbol sym_procins;
-        private static RubySymbol sym_stag;
-        private static RubySymbol sym_etag;
-        private static RubySymbol sym_emptytag;
-        private static RubySymbol sym_comment;
-        private static RubySymbol sym_cdata;
-        private static RubySymbol sym_text;
-        private static RubySymbol sym_EMPTY;
-        private static RubySymbol sym_CDATA;
+        private RubySymbol sym_xmldecl;
+        private RubySymbol sym_doctype;
+        private RubySymbol sym_procins;
+        private RubySymbol sym_stag;
+        private RubySymbol sym_etag;
+        private RubySymbol sym_emptytag;
+        private RubySymbol sym_comment;
+        private RubySymbol sym_cdata;
+        private RubySymbol sym_text;
+        private RubySymbol sym_EMPTY;
+        private RubySymbol sym_CDATA;
 
-        private static RubySymbol symAllow;
-        private static RubySymbol symDeny;
+        private RubySymbol symAllow;
+        private RubySymbol symDeny;
 
-        private static RubySymbol _optXml;
-        private static RubySymbol _optFixupTags;
-        private static RubySymbol _optXhtmlStrict;
+        private RubySymbol _optXml;
+        private RubySymbol _optFixupTags;
+        private RubySymbol _optXhtmlStrict;
 
         #endregion
 
@@ -985,7 +985,7 @@ namespace IronRuby.Hpricot {
             InitializeHpricotSymbols(_context);
         }
 
-        private static void InitializeHpricotSymbols(RubyContext context) { 
+        private void InitializeHpricotSymbols(RubyContext context) { 
             sym_xmldecl = context.CreateAsciiSymbol("xmldecl");
             sym_doctype = context.CreateAsciiSymbol("doctype");
             sym_procins = context.CreateAsciiSymbol("procins");
