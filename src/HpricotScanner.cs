@@ -1494,8 +1494,8 @@ namespace IronRuby.Hpricot {
                 throw RubyExceptions.CreateArgumentError("bad Hpricot argument, String or IO only please.");
             }
 
-            if (_blockParam == null) { 
-                ScannerState state = new ScannerState();
+            if (_blockParam == null) {
+                ScannerState state = new ScannerState(_currentContext);
                 Hpricot.Document doc = new Hpricot.Document();
                 state.Doc = doc;
                 state.Focus = state.Doc as IHpricotDataContainer;

@@ -1,10 +1,12 @@
 ﻿using System;
+using IronRuby.Runtime;
 using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
     public class ScannerState {
         #region fields
 
+        private RubyContext _context;
         private IHpricotDataContainer _doc;
         private IHpricotDataContainer _focus;
         private IHpricotDataContainer _last;
@@ -15,17 +17,9 @@ namespace IronRuby.Hpricot {
 
         #endregion
 
-        #region constructors
-
-        public ScannerState() {
-            _xml = false;
-            _strict = false;
-            _fixup = false;
+        public ScannerState(RubyContext context) {
+            _context = context;
         }
-
-        #endregion
-
-        #region properties 
 
         public IHpricotDataContainer Doc {
             get { return _doc; }
@@ -64,6 +58,8 @@ namespace IronRuby.Hpricot {
             set { _fixup = value; }
         }
 
-        #endregion
+        public RubyContext Context {
+            get { return _context; }
+        }
     }
 }
