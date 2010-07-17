@@ -1056,11 +1056,7 @@ namespace IronRuby.Hpricot {
             }
         }
 
-        private T H_ELE<T>(ScannerState state, Object sym, Object tag, Object attr, Object ec, Int32 raw, Int32 rawlen) where T : IHpricotDataContainer, new() {
-            // TODO: way ugly, isn't it?
-
-            T ele = new T();
-
+        private IHpricotDataContainer H_ELE(IHpricotDataContainer ele, ScannerState state, Object sym, Object tag, Object attr, Object ec, Int32 raw, Int32 rawlen) {
             if (ele is Hpricot.Element) {
                 ElementData he = ele.GetData<ElementData>();
 
@@ -1175,8 +1171,8 @@ namespace IronRuby.Hpricot {
             }
 
             if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym)) { 
-                Hpricot.Element ele = H_ELE<Hpricot.Element>(state, sym, tag, attr, ec, raw, rawlen);
-                ElementData he = ele.GetData<ElementData>();
+                var ele = H_ELE(new Hpricot.Element(), state, sym, tag, attr, ec, raw, rawlen);
+                var he = ele.GetData<ElementData>();
                 he.Name = tag.GetHashCode();
 
                 if (!state.Xml) {
@@ -1263,11 +1259,10 @@ namespace IronRuby.Hpricot {
                 }
 
                 if (match == null) {
-                    Hpricot.BogusETag ele = H_ELE<Hpricot.BogusETag>(state, sym, tag, attr, ec, raw, rawlen);
-                    rb_hpricot_add(state.Focus, ele as IHpricotDataContainer);
+                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.BogusETag(), state, sym, tag, attr, ec, raw, rawlen));
                 }
                 else {
-                    Hpricot.ETag ele = H_ELE<Hpricot.ETag>(state, sym, tag, attr, ec, raw, rawlen);
+                    var ele = H_ELE(new Hpricot.ETag(), state, sym, tag, attr, ec, raw, rawlen);
                     Debug.Assert(match is IHpricotDataContainer, "match is not an instance of IHpricotDataContainer");
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
 
@@ -1281,10 +1276,11 @@ namespace IronRuby.Hpricot {
 
             }
             else if (sym_cdata.Equals(sym)) {
-                rb_hpricot_add(state.Focus, H_ELE<Hpricot.CData>(state, sym, tag, attr, ec, raw, rawlen));
+
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.CData(), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_comment.Equals(sym)) {
-                rb_hpricot_add(state.Focus, H_ELE<Hpricot.Comment>(state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Comment(), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_doctype.Equals(sym)) {
                 if (state.Strict) {
@@ -1293,7 +1289,7 @@ namespace IronRuby.Hpricot {
                     (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.CreateAscii("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
                     (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.CreateAscii("-//W3C//DTD XHTML 1.0 Strict//EN"));
                 }
-                rb_hpricot_add(state.Focus, H_ELE<Hpricot.DocumentType>(state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.DocumentType(), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_procins.Equals(sym)) {
                 Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
@@ -1303,7 +1299,7 @@ namespace IronRuby.Hpricot {
 
                 tag = match.GetGroupValue(1);
                 attr = match.GetGroupValue(2);
-                rb_hpricot_add(state.Focus, H_ELE<Hpricot.ProcedureInstruction>(state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.ProcedureInstruction(), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
                 // TODO: add raw_string as well?
@@ -1316,11 +1312,11 @@ namespace IronRuby.Hpricot {
                     (he.Tag as MutableString).Append(tag as MutableString);
                 }
                 else {
-                    rb_hpricot_add(state.Focus, H_ELE<Hpricot.Text>(state, sym, tag, attr, ec, raw, rawlen));
+                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Text(), state, sym, tag, attr, ec, raw, rawlen));
                 }
             }
             else if (sym_xmldecl.Equals(sym)) {
-                rb_hpricot_add(state.Focus, H_ELE<Hpricot.XmlDeclaration>(state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.XmlDeclaration(), state, sym, tag, attr, ec, raw, rawlen));
             }
         }
 
