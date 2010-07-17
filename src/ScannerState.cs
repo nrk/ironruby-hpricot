@@ -4,8 +4,6 @@ using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
     public class ScannerState {
-        #region fields
-
         private RubyContext _context;
         private IHpricotDataContainer _doc;
         private IHpricotDataContainer _focus;
@@ -14,8 +12,6 @@ namespace IronRuby.Hpricot {
         private bool _xml;
         private bool _strict;
         private bool _fixup;
-
-        #endregion
 
         public ScannerState(RubyContext context) {
             _context = context;
