@@ -17,7 +17,6 @@ namespace IronRuby.Hpricot {
         #region fields
 
         private static readonly String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
-        private static readonly RubyRegex _procInsParse = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
 
         private RubyContext/*!*/ _context;
         private BlockParam/*!*/ _blockParam;
@@ -1001,10 +1000,6 @@ namespace IronRuby.Hpricot {
 
         #endregion
 
-        public static RubyRegex ProcInsParse {
-            get { return _procInsParse; }
-        }
-        
         private static Object rb_hash_lookup(Hash hash, Object key) {
             Object value;
             return hash.TryGetValue(key, out value) ? value : null;
@@ -1262,7 +1257,7 @@ namespace IronRuby.Hpricot {
             else if (sym_procins.Equals(sym)) {
                 Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
 
-                MatchData match = ProcInsParse.Match(RubyEncoding.Binary, tag as MutableString);
+                MatchData match = Utilities.ProcessInstructionParser.Match(RubyEncoding.Binary, tag as MutableString);
                 Debug.Assert(match.GroupSuccess(0) && match.GroupCount == 3, "ProcInsParse failed to parse procins");
 
                 tag = match.GetGroupValue(1);

@@ -7,6 +7,8 @@ using Microsoft.Scripting.Runtime;
 
 namespace IronRuby.Hpricot {
     public static class Utilities {
+        public static readonly RubyRegex ProcessInstructionParser = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
+
         public static MutableString CreateMutableStringFromBuffer(char[] buffer, int raw, int rawlen) { 
             return MutableString.Create(new String(buffer, raw, rawlen), RubyEncoding.Binary);
         }

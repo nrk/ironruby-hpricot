@@ -9,7 +9,7 @@ namespace IronRuby.Hpricot {
     [RubyModule("Hpricot")]
     public static class Hpricot {
         [RubyConstant("ProcInsParse")]
-        public static readonly RubyRegex ProcInsParse = HpricotScanner.ProcInsParse;
+        public static readonly RubyRegex ProcInsParse = Utilities.ProcessInstructionParser;
 
         [RubyMethod("scan", RubyMethodAttributes.PublicSingleton)]
         public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 
