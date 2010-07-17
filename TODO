@@ -1,7 +1,4 @@
  * README needs to be populated with notes and building instructions. The code 
    needs the right dose of comments.
 
- * Split classes in multiple files since the code is awfully organized. Also, 
-   all those #region blocks are kind of stupid.
-
  * Update to the latest bugfixes from the original Hpricot library.
