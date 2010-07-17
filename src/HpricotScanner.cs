@@ -23,7 +23,6 @@ namespace IronRuby.Hpricot {
 
         private RubyContext/*!*/ _currentContext;
         private BlockParam/*!*/ _blockParam;
-        private RespondToStorage/*!*/ _respondToStorage;
         private ConversionStorage<MutableString> _toMutableString;
         private BinaryOpStorage _readIOStorage;
 
@@ -977,10 +976,8 @@ namespace IronRuby.Hpricot {
         
         #region constructors 
 
-        public HpricotScanner(RespondToStorage/*!*/ respondToStorage, ConversionStorage<MutableString>/*!*/ toMutableString, 
-            BinaryOpStorage/*!*/ readIOStorage, BlockParam block) {
-            _currentContext = respondToStorage.Context;
-            _respondToStorage = respondToStorage;
+        public HpricotScanner(ConversionStorage<MutableString>/*!*/ toMutableString, BinaryOpStorage/*!*/ readIOStorage, BlockParam block) {
+            _currentContext = toMutableString.Context;
             _toMutableString = toMutableString;
             _readIOStorage = readIOStorage;
             _blockParam = block;
@@ -1477,13 +1474,13 @@ namespace IronRuby.Hpricot {
 
             taint = _currentContext.IsObjectTainted(source);
 
-            bool sourceRespondsToRead = Protocols.RespondTo(_respondToStorage, source, "read");
+            bool sourceRespondsToRead = _currentContext.RespondTo(source, "read");
 
             RubyIOReadCallSite readIOCallSite = null;
             if (sourceRespondsToRead) {
                 readIOCallSite = _readIOStorage.GetCallSite("read", 1);
             }
-            else if (Protocols.RespondTo(_respondToStorage, source, "to_str")) {
+            else if (_currentContext.RespondTo(source, "to_str")) {
                 source = Protocols.CastToString(_toMutableString, source);
             }
             else {

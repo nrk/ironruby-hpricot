@@ -36,7 +36,7 @@ namespace IronRuby.Hpricot {
             }
 
             //NOTE: block can be null as of Hpricot 0.7, see HpricotScanner.ELE
-            HpricotScanner scanner = new HpricotScanner(respondsTo, toMutableStringStorage, readIOStorage, block);
+            HpricotScanner scanner = new HpricotScanner(toMutableStringStorage, readIOStorage, block);
             return scanner.Scan(source, options, elementContent as Hash);
         }
 
