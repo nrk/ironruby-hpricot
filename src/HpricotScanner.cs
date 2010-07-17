@@ -33,20 +33,20 @@ namespace IronRuby.Hpricot {
 
         #region fields - hpricot symbols
 
-        private static Object sym_xmldecl;
-        private static Object sym_doctype;
-        private static Object sym_procins;
-        private static Object sym_stag;
-        private static Object sym_etag;
-        private static Object sym_emptytag;
-        private static Object sym_comment;
-        private static Object sym_cdata;
-        private static Object sym_text;
-        private static Object sym_EMPTY;
-        private static Object sym_CDATA;
+        private static RubySymbol sym_xmldecl;
+        private static RubySymbol sym_doctype;
+        private static RubySymbol sym_procins;
+        private static RubySymbol sym_stag;
+        private static RubySymbol sym_etag;
+        private static RubySymbol sym_emptytag;
+        private static RubySymbol sym_comment;
+        private static RubySymbol sym_cdata;
+        private static RubySymbol sym_text;
+        private static RubySymbol sym_EMPTY;
+        private static RubySymbol sym_CDATA;
 
-        private static Object symAllow;
-        private static Object symDeny;
+        private static RubySymbol symAllow;
+        private static RubySymbol symDeny;
 
         private static RubySymbol _optXml;
         private static RubySymbol _optFixupTags;
@@ -1286,8 +1286,8 @@ namespace IronRuby.Hpricot {
                 if (state.Strict) {
                     // TODO: need to check if attr is really an Hash instance
                     Debug.Assert(attr is Hash, "attr is not an instance of Hash");
-                    (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.CreateAscii("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
-                    (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.CreateAscii("-//W3C//DTD XHTML 1.0 Strict//EN"));
+                    (attr as Hash).Add(state.Context.CreateAsciiSymbol("system_id"), MutableString.CreateAscii("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
+                    (attr as Hash).Add(state.Context.CreateAsciiSymbol("public_id"), MutableString.CreateAscii("-//W3C//DTD XHTML 1.0 Strict//EN"));
                 }
                 rb_hpricot_add(state.Focus, H_ELE(new Hpricot.DocumentType(state), state, sym, tag, attr, ec, raw, rawlen));
             }
@@ -1664,15 +1664,15 @@ namespace IronRuby.Hpricot {
                                 break;
                             case 7: { SET(akey, p); }
                                 break;
-                            case 8: { SET(aval, p); ATTR(SymbolTable.StringToId("version"), aval); }
+                            case 8: { SET(aval, p); ATTR(_state.Context.CreateAsciiSymbol("version"), aval); }
                                 break;
-                            case 9: { SET(aval, p); ATTR(SymbolTable.StringToId("encoding"), aval); }
+                            case 9: { SET(aval, p); ATTR(_state.Context.CreateAsciiSymbol("encoding"), aval); }
                                 break;
-                            case 10: { SET(aval, p); ATTR(SymbolTable.StringToId("standalone"), aval); }
+                            case 10: { SET(aval, p); ATTR(_state.Context.CreateAsciiSymbol("standalone"), aval); }
                                 break;
-                            case 11: { SET(aval, p); ATTR(SymbolTable.StringToId("public_id"), aval); }
+                            case 11: { SET(aval, p); ATTR(_state.Context.CreateAsciiSymbol("public_id"), aval); }
                                 break;
-                            case 12: { SET(aval, p); ATTR(SymbolTable.StringToId("system_id"), aval); }
+                            case 12: { SET(aval, p); ATTR(_state.Context.CreateAsciiSymbol("system_id"), aval); }
                                 break;
                             case 13: {
                                     akey[0] = null;

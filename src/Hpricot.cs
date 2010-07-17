@@ -229,8 +229,8 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("DocType", Inherits = typeof(BaseElement))]
         public class DocumentType : BaseElement {
-            private static readonly SymbolId _systemId = SymbolTable.StringToId("system_id");
-            private static readonly SymbolId _publicId = SymbolTable.StringToId("public_id");
+            private RubySymbol _systemId;
+            private RubySymbol _publicId;
 
             public DocumentType(ScannerState state) 
                 : this(state.Context) { 
@@ -238,6 +238,9 @@ namespace IronRuby.Hpricot {
 
             public DocumentType(RubyContext context)
                 : base(context, new AttributeData()) {
+
+                _systemId = context.CreateAsciiSymbol("system_id");
+                _publicId = context.CreateAsciiSymbol("public_id");
             }
 
             [RubyConstructor]
@@ -284,7 +287,7 @@ namespace IronRuby.Hpricot {
                 }
 
                 Object value;
-                (data.Attr as Hash).TryGetValue(_publicId, out value);
+                (data.Attr as Hash).TryGetValue(self._publicId, out value);
                 return value;
             }
 
@@ -294,7 +297,7 @@ namespace IronRuby.Hpricot {
                 if (data.AttrIsNull) {
                     data.Attr = new Hash(context);
                 }
-                (data.Attr as Hash)[_publicId] = publicId;
+                (data.Attr as Hash)[self._publicId] = publicId;
             }
 
             [RubyMethod("system_id")]
@@ -305,7 +308,7 @@ namespace IronRuby.Hpricot {
                 }
 
                 Object value;
-                (data.Attr as Hash).TryGetValue(_systemId, out value);
+                (data.Attr as Hash).TryGetValue(self._systemId, out value);
                 return value;
             }
 
@@ -315,7 +318,7 @@ namespace IronRuby.Hpricot {
                 if (data.AttrIsNull) {
                     data.Attr = new Hash(context);
                 }
-                (data.Attr as Hash)[_systemId] = systemId;
+                (data.Attr as Hash)[self._systemId] = systemId;
             }
         }
 
@@ -489,9 +492,9 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("XMLDecl", Inherits = typeof(BaseElement))]
         public class XmlDeclaration : BaseElement {
-            private static readonly SymbolId _encoding = SymbolTable.StringToId("encoding");
-            private static readonly SymbolId _standalone = SymbolTable.StringToId("standalone");
-            private static readonly SymbolId _version = SymbolTable.StringToId("version");
+            private RubySymbol _encoding;
+            private RubySymbol _standalone;
+            private RubySymbol _version;
 
             public XmlDeclaration(ScannerState state) 
                 : this(state.Context) { 
@@ -499,6 +502,10 @@ namespace IronRuby.Hpricot {
 
             public XmlDeclaration(RubyContext context)
                 : base(context, new AttributeData()) {
+
+                _encoding = context.CreateAsciiSymbol("encoding");
+                _standalone = context.CreateAsciiSymbol("standalone");
+                _version = context.CreateAsciiSymbol("version");
             }
 
             [RubyConstructor]
@@ -537,7 +544,7 @@ namespace IronRuby.Hpricot {
                 }
 
                 Object value;
-                (data.Attr as Hash).TryGetValue(_encoding, out value);
+                (data.Attr as Hash).TryGetValue(self._encoding, out value);
                 return value;
             }
 
@@ -547,7 +554,7 @@ namespace IronRuby.Hpricot {
                 if (data.AttrIsNull) {
                     data.Attr = new Hash(context);
                 }
-                (data.Attr as Hash)[_encoding] = encoding;
+                (data.Attr as Hash)[self._encoding] = encoding;
             }
 
             [RubyMethod("standalone")]
@@ -558,7 +565,7 @@ namespace IronRuby.Hpricot {
                 }
 
                 Object value;
-                (data.Attr as Hash).TryGetValue(_standalone, out value);
+                (data.Attr as Hash).TryGetValue(self._standalone, out value);
                 return value;
             }
 
@@ -568,7 +575,7 @@ namespace IronRuby.Hpricot {
                 if (data.AttrIsNull) {
                     data.Attr = new Hash(context);
                 }
-                (data.Attr as Hash)[_standalone] = standalone;
+                (data.Attr as Hash)[self._standalone] = standalone;
             }
 
             [RubyMethod("version")]
@@ -579,7 +586,7 @@ namespace IronRuby.Hpricot {
                 }
 
                 Object value;
-                (data.Attr as Hash).TryGetValue(_version, out value);
+                (data.Attr as Hash).TryGetValue(self._version, out value);
                 return value;
             }
 
@@ -589,7 +596,7 @@ namespace IronRuby.Hpricot {
                 if (data.AttrIsNull) {
                     data.Attr = new Hash(context);
                 }
-                (data.Attr as Hash)[_version] = version;
+                (data.Attr as Hash)[self._version] = version;
             }
         }
 
