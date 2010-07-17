@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
 using Microsoft.Scripting;
@@ -43,12 +44,12 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("children")]
-        public static Object GetChildren(Element/*!*/ self) {
+        public static IList<Object> GetChildren(Element/*!*/ self) {
             return (self._data as ElementData).Children;
         }
 
         [RubyMethod("children=")]
-        public static void SetChildren(Element/*!*/ self, Object/*!*/ children) {
+        public static void SetChildren(Element/*!*/ self, IList<Object>/*!*/ children) {
             (self._data as ElementData).Children = children;
         }
 

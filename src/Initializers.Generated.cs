@@ -133,13 +133,13 @@ namespace IronRuby.Hpricot {
         
         private static void LoadHpricot__Doc_Instance(IronRuby.Builtins.RubyModule/*!*/ module) {
             DefineLibraryMethod(module, "children", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.Document, System.Object>(IronRuby.Hpricot.Document.GetChildren)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.Document, System.Collections.Generic.IList<Object>>(IronRuby.Hpricot.Document.GetChildren)
             );
             
             DefineLibraryMethod(module, "children=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.Document, System.Object>(IronRuby.Hpricot.Document.SetChildren)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.Document, System.Collections.Generic.IList<Object>>(IronRuby.Hpricot.Document.SetChildren)
             );
             
         }
@@ -179,13 +179,13 @@ namespace IronRuby.Hpricot {
         
         private static void LoadHpricot__Elem_Instance(IronRuby.Builtins.RubyModule/*!*/ module) {
             DefineLibraryMethod(module, "children", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.GetChildren)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.Element, System.Collections.Generic.IList<Object>>(IronRuby.Hpricot.Element.GetChildren)
             );
             
             DefineLibraryMethod(module, "children=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.SetChildren)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.Element, System.Collections.Generic.IList<Object>>(IronRuby.Hpricot.Element.SetChildren)
             );
             
             DefineLibraryMethod(module, "clear_raw", 0x11, 

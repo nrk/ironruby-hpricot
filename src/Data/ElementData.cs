@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
     public class ElementData : AttributeData {
-        // TODO: RubyArray
-        private Object _children;
+        private IList<Object> _children;
         private Object _etag;
         private Object _raw;
         private Object _ec;
         private Int32 _name;
 
-        public Object Children {
+        public IList<Object> Children {
             get { return _children; }
             set { _children = value; }
         }
