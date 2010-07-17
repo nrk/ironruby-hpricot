@@ -7,98 +7,8 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
 namespace IronRuby.FastXs {
-    #region EntityMap
-
-    /// <summary>
-    /// </summary>
-    public interface EntityMap {
-        /// <summary>
-        /// Add an entry to this entity map.
-        /// </summary>
-        /// <param name="name">the entity name</param>
-        /// <param name="value">the entity value</param>
-        void Add(String name, Int32 value);
-
-        /// <summary>
-        /// Returns the name of the entity identified by the specified value.
-        /// </summary>
-        /// <param name="value">the value to locate</param>
-        /// <returns>entity name associated with the specified value</returns>
-        String Name(Int32 value);
-
-        /// <summary>
-        /// Returns the value of the entity identified by the specified name.
-        /// </summary>
-        /// <param name="name">the name to locate</param>
-        /// <returns>entity value associated with the specified name</returns>
-        int Value(String name);
-    }
-
-    #endregion
-
-    #region PrimitiveEntityMap 
-
-    public class PrimitiveEntityMap : EntityMap {
-        private Dictionary<String, Int32>/*!*/ _mapNameToValue;
-        private Dictionary<Int32, String>/*!*/ _mapValueToName;
-
-        public PrimitiveEntityMap() {
-            _mapNameToValue = new Dictionary<String, Int32>();
-            _mapValueToName = new Dictionary<Int32, String>();
-        }
-
-        public void Add(String/*!*/ name, Int32 value) {
-            _mapNameToValue.Add(name, value);
-            _mapValueToName.Add(value, name);
-        }
-
-        public String Name(Int32 value) {
-            return _mapValueToName.ContainsKey(value) ? _mapValueToName[value] : null;
-        }
-
-        public int Value(String/*!*/ name) {
-            return _mapNameToValue.ContainsKey(name) ? _mapNameToValue[name] : -1;
-        }
-    }
-
-    #endregion
-
-    #region LookupEntityMap
-
-    public class LookupEntityMap : PrimitiveEntityMap {
-        private String[] _lookupTable;
-        private const int LOOKUP_TABLE_SIZE = 256;
-
-        public new String Name(int value) {
-            if (value < LOOKUP_TABLE_SIZE) {
-                return LookupTable[value];
-            }
-            return base.Name(value);
-        }
-
-        private String[] LookupTable {
-            get {
-                if (_lookupTable == null) {
-                    CreateLookupTable();
-                }
-                return _lookupTable;
-            }
-        }
-
-        private void CreateLookupTable() {
-            _lookupTable = new String[LOOKUP_TABLE_SIZE];
-            for (int i = 0; i < LOOKUP_TABLE_SIZE; ++i) {
-                _lookupTable[i] = base.Name(i);
-            }
-        }
-    }
-
-    #endregion
-
-
     public class Entities {
         #region fields 
-        
         /// <summary>
         /// 
         /// </summary>
@@ -431,12 +341,16 @@ namespace IronRuby.FastXs {
 
         #endregion
 
-        #region constructors 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Entities() {
             _map = new LookupEntityMap();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         static Entities() {
             _xmlEntities = new Entities();
             _xmlEntities.AddEntities(BASIC_ARRAY);
@@ -451,26 +365,6 @@ namespace IronRuby.FastXs {
             _html40Entities.AddEntities(ISO8859_1_ARRAY);
             _html40Entities.AddEntities(HTML40_ARRAY);
         }
-
-        #endregion
-
-        #region properties
-
-        public static Entities XML { 
-            get { return _xmlEntities; } 
-        }
-
-        public static Entities HTML32 { 
-            get { return _html32Entities; } 
-        }
-
-        public static Entities HTML40 { 
-            get { return _html40Entities; } 
-        }
-
-        #endregion
-
-        #region methods 
 
         /// <summary>
         /// Adds entities to this entity.
@@ -685,6 +579,25 @@ namespace IronRuby.FastXs {
             }
         }
 
-        #endregion 
+        /// <summary>
+        /// Returns XML entities
+        /// </summary>
+        public static Entities XML {
+            get { return _xmlEntities; }
+        }
+
+        /// <summary>
+        /// Returns HTML 3.2 entities
+        /// </summary>
+        public static Entities HTML32 {
+            get { return _html32Entities; }
+        }
+
+        /// <summary>
+        /// Returns HTML 4.0 entities
+        /// </summary>
+        public static Entities HTML40 {
+            get { return _html40Entities; }
+        }
     }
 }
