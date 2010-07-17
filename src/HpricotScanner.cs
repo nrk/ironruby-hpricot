@@ -1163,10 +1163,7 @@ namespace IronRuby.Hpricot {
                             }
                         }
 
-                        if (he.Parent != null) {
-                            Debug.Assert(he.Parent is IHpricotDataContainer, "he.Parent is not an instance of IHpricotDataContainer");
-                        }
-                        e = hee.Parent as IHpricotDataContainer;
+                        e = hee.Parent;
                     }
 
                     if (match == null) {
@@ -1218,8 +1215,7 @@ namespace IronRuby.Hpricot {
                         match = e;
                         break;
                     }
-
-                    e = he.Parent as IHpricotDataContainer;
+                    e = he.Parent;
                 }
 
                 if (match == null) {
@@ -1233,8 +1229,7 @@ namespace IronRuby.Hpricot {
                     // TODO: couldn't find this in the original implementation but it still sounds right.
                     he.ETag = ele;
 
-                    Debug.Assert(he.Parent is IHpricotDataContainer, "he.Parent is not an instance of IHpricotDataContainer");
-                    state.Focus = he.Parent as IHpricotDataContainer;
+                    state.Focus = he.Parent;
                     state.Last = null;
                 }
 

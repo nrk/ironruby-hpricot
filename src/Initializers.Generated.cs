@@ -89,13 +89,13 @@ namespace IronRuby.Hpricot {
         
         private static void LoadHpricot__BaseEle_Instance(IronRuby.Builtins.RubyModule/*!*/ module) {
             DefineLibraryMethod(module, "parent", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.BaseElement, System.Object>(IronRuby.Hpricot.BaseElement.GetParent)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.BaseElement, IronRuby.Hpricot.IHpricotDataContainer>(IronRuby.Hpricot.BaseElement.GetParent)
             );
             
             DefineLibraryMethod(module, "parent=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.BaseElement, System.Object>(IronRuby.Hpricot.BaseElement.SetParent)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.BaseElement, IronRuby.Hpricot.IHpricotDataContainer>(IronRuby.Hpricot.BaseElement.SetParent)
             );
             
             DefineLibraryMethod(module, "raw_string", 0x11, 

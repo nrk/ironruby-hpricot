@@ -44,12 +44,12 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("parent")]
-        public static Object GetParent(BaseElement/*!*/ self) {
+        public static IHpricotDataContainer GetParent(BaseElement/*!*/ self) {
             return self._data.Parent;
         }
 
         [RubyMethod("parent=")]
-        public static void SetParent(BaseElement/*!*/ self, Object/*!*/ parent) {
+        public static void SetParent(BaseElement/*!*/ self, IHpricotDataContainer/*!*/ parent) {
             self._data.Parent = parent;
         }
     }
