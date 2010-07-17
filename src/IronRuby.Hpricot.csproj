@@ -60,12 +60,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\AttributeData.cs" />
+    <Compile Include="Data\ElementData.cs" />
+    <Compile Include="Elements\BaseEle.cs" />
+    <Compile Include="Elements\CData.cs" />
+    <Compile Include="Elements\Comment.cs" />
+    <Compile Include="Elements\BogusETag.cs" />
+    <Compile Include="Elements\IHpricotDataContainer.cs" />
+    <Compile Include="Elements\ProcedureInstruction.cs" />
+    <Compile Include="Elements\XmlDeclaration.cs" />
+    <Compile Include="Elements\Text.cs" />
+    <Compile Include="Elements\ETag.cs" />
+    <Compile Include="Elements\Element.cs" />
+    <Compile Include="Elements\DocumentType.cs" />
+    <Compile Include="Elements\Document.cs" />
     <Compile Include="FastXs\BuiltinsOps.cs" />
     <Compile Include="FastXs\EntityMap.cs" />
     <Compile Include="FastXs\FastXs.cs" />
     <Compile Include="Hpricot.cs" />
-    <Compile Include="HpricotObjects.cs" />
+    <Compile Include="Data\BasicData.cs" />
     <Compile Include="HpricotScanner.cs" />
+    <Compile Include="ParserException.cs" />
     <Compile Include="ScannerState.cs" />
     <Compile Include="Initializers.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

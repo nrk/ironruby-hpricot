@@ -5,7 +5,7 @@ using IronRuby.Runtime;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
-namespace IronRuby.FastXs {
+namespace IronRuby.Hpricot.FastXs {
     [RubyModule(Extends = typeof(MutableString))]
     public static class MutableStringOps {
         [RubyMethod("fast_xs")]

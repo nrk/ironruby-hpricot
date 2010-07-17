@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IronRuby.FastXs {
+namespace IronRuby.Hpricot.FastXs {
     /// <summary>
     /// 
     /// </summary>

@@ -6,7 +6,7 @@ using IronRuby.Runtime;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
-namespace IronRuby.FastXs {
+namespace IronRuby.Hpricot.FastXs {
     public class Entities {
         #region fields 
         /// <summary>

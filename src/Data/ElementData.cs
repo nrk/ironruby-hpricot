@@ -2,46 +2,6 @@
 using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
-    #region BasicData 
-
-    public class BasicData {
-        private Object _tag;
-        private Object _parent;
-
-        public Object Tag { 
-            get { return _tag; } 
-            set { _tag = value; }
-        }
-
-        public Object Parent {
-            get { return _parent; }
-            set { _parent = value; }
-        }
-    }
-
-    #endregion
-
-    #region AttributeData
-
-    public class AttributeData : BasicData {
-        // TODO: Hash or MutableString?
-        private Object _attr;
-
-        public Object Attr {
-            get { return _attr; }
-            set { _attr = value; }
-        }
-
-        // TODO: this smells, will fix later
-        public bool AttrIsNull {
-            get { return _attr == null; }
-        }
-    }
-
-    #endregion
-
-    #region ElementData
-
     public class ElementData : AttributeData {
         // TODO: RubyArray
         private Object _children;
@@ -75,6 +35,4 @@ namespace IronRuby.Hpricot {
             set { _name = value; }
         }
     }
-
-    #endregion
 }
