@@ -48,9 +48,10 @@ namespace IronRuby.Hpricot {
 
         public bool Strict {
             get { return _strict; }
-
-            //TODO: setting Strict to true should set Fixup to true automatically.
-            set { _strict = value; }
+            set {
+                _strict = value;
+                Fixup = true;
+            }
         }
         
         public bool Fixup {
