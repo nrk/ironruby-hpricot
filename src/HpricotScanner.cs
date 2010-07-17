@@ -33,24 +33,24 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region fields - hpricot symbols
 
-        private static Object sym_xmldecl = SymbolTable.StringToId("xmldecl");
-        private static Object sym_doctype = SymbolTable.StringToId("doctype");
-        private static Object sym_procins = SymbolTable.StringToId("procins");
-        private static Object sym_stag = SymbolTable.StringToId("stag");
-        private static Object sym_etag = SymbolTable.StringToId("etag");
-        private static Object sym_emptytag = SymbolTable.StringToId("emptytag");
-        private static Object sym_comment = SymbolTable.StringToId("comment");
-        private static Object sym_cdata = SymbolTable.StringToId("cdata");
-        private static Object sym_text = SymbolTable.StringToId("text");
-        private static Object sym_EMPTY = SymbolTable.StringToId("EMPTY");
-        private static Object sym_CDATA = SymbolTable.StringToId("CDATA");
+        private static Object sym_xmldecl;
+        private static Object sym_doctype;
+        private static Object sym_procins;
+        private static Object sym_stag;
+        private static Object sym_etag;
+        private static Object sym_emptytag;
+        private static Object sym_comment;
+        private static Object sym_cdata;
+        private static Object sym_text;
+        private static Object sym_EMPTY;
+        private static Object sym_CDATA;
 
-        private static Object symAllow = SymbolTable.StringToId("allow");
-        private static Object symDeny = SymbolTable.StringToId("deny");
+        private static Object symAllow;
+        private static Object symDeny;
 
-        private static SymbolId _optXml = SymbolTable.StringToId("xml");
-        private static SymbolId _optFixupTags = SymbolTable.StringToId("fixup_tags");
-        private static SymbolId _optXhtmlStrict = SymbolTable.StringToId("xhtml_strict");
+        private static RubySymbol _optXml;
+        private static RubySymbol _optFixupTags;
+        private static RubySymbol _optXhtmlStrict;
 
         #endregion
 
@@ -984,6 +984,29 @@ namespace IronRuby.Libraries.Hpricot {
             _toMutableString = toMutableString;
             _readIOStorage = readIOStorage;
             _blockParam = block;
+
+            InitializeHpricotSymbols(_currentContext);
+        }
+
+        private static void InitializeHpricotSymbols(RubyContext context) { 
+            sym_xmldecl = context.CreateAsciiSymbol("xmldecl");
+            sym_doctype = context.CreateAsciiSymbol("doctype");
+            sym_procins = context.CreateAsciiSymbol("procins");
+            sym_stag = context.CreateAsciiSymbol("stag");
+            sym_etag = context.CreateAsciiSymbol("etag");
+            sym_emptytag = context.CreateAsciiSymbol("emptytag");
+            sym_comment = context.CreateAsciiSymbol("comment");
+            sym_cdata = context.CreateAsciiSymbol("cdata");
+            sym_text = context.CreateAsciiSymbol("text");
+            sym_EMPTY = context.CreateAsciiSymbol("EMPTY");
+            sym_CDATA = context.CreateAsciiSymbol("CDATA");
+
+            symAllow = context.CreateAsciiSymbol("allow");
+            symDeny = context.CreateAsciiSymbol("deny");
+
+            _optXml = context.CreateAsciiSymbol("xml");
+            _optFixupTags = context.CreateAsciiSymbol("fixup_tags");
+            _optXhtmlStrict = context.CreateAsciiSymbol("xhtml_strict");
         }
 
         #endregion
@@ -1018,7 +1041,7 @@ namespace IronRuby.Libraries.Hpricot {
 
         #region miscellaneous methods
 
-        private static bool OPT(Hash opts, SymbolId key) {
+        private static bool OPT(Hash opts, RubySymbol key) {
             if (opts != null) {
                 Object value;
                 if (opts.TryGetValue(key, out value) && value is bool) {
