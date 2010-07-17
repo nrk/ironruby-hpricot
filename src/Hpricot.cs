@@ -29,14 +29,11 @@ namespace IronRuby.Hpricot {
         public static Object Scan(ConversionStorage<MutableString>/*!*/ toMutableStringStorage, RespondToStorage/*!*/ respondsTo, 
             BinaryOpStorage/*!*/ readIOStorage, BlockParam block, RubyModule/*!*/ self, Object/*!*/ source, Hash/*!*/ options) {
 
-            // TODO: improve me please!
             Object elementContent;
             if (!self.TryGetConstant(null, "ElementContent", out elementContent) && !(elementContent is Hash)) {
                 throw new Exception("Hpricot::ElementContent is missing or it is not an Hash");
             }
-
-            //NOTE: block can be null as of Hpricot 0.7, see HpricotScanner.ELE
-            HpricotScanner scanner = new HpricotScanner(toMutableStringStorage, readIOStorage, block);
+            var scanner = new HpricotScanner(toMutableStringStorage, readIOStorage, block);
             return scanner.Scan(source, options, elementContent as Hash);
         }
 
@@ -47,13 +44,16 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("buffer_size", RubyMethodAttributes.PublicSingleton)]
         public static Int32? GetBufferSize(RubyModule/*!*/ self) {
-            return HpricotScanner.BufferSize;
+            Object bufferSize;
+            if (self.TryGetClassVariable("@@buffer_size", out bufferSize)) {
+                return (int) bufferSize;
+            }
+            return null;
         }
 
         [RubyMethod("buffer_size=", RubyMethodAttributes.PublicSingleton)]
         public static void SetBufferSize(RubyModule/*!*/ self, Int32 bufferSize) {
-            // TODO: thread safety
-            HpricotScanner.BufferSize = bufferSize;
+            self.SetClassVariable("@@buffer_size", bufferSize);
         }
 
         #endregion

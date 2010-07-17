@@ -17,8 +17,6 @@ namespace IronRuby.Hpricot {
         #region fields - miscellaneous
 
         private static readonly String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
-
-        private static Int32? _bufferSize;
         private static readonly RubyRegex _procInsParse = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
 
         private RubyContext/*!*/ _context;
@@ -66,7 +64,7 @@ namespace IronRuby.Hpricot {
         Object[] tag, akey, aval;
         int mark_tag, mark_akey, mark_aval;
         bool done = false, ele_open = false;
-        int buffer_size = 0;
+        int buffer_size = DEFAULT_BUFFER_SIZE;
         bool taint = false;
 
         #endregion
@@ -1010,12 +1008,7 @@ namespace IronRuby.Hpricot {
 
 
         #region static properties
-
-        public static Int32? BufferSize {
-            get { return _bufferSize; }
-            set { _bufferSize = value; }
-        }
-
+        
         public static RubyRegex ProcInsParse {
             get { return _procInsParse; }
         }
@@ -1099,6 +1092,20 @@ namespace IronRuby.Hpricot {
             }
             children.Add(ele);
             he2.Parent = focus;
+        }
+
+        private static int GetBufferSize(RubyContext context) { 
+            RubyModule hpricotModule;
+            if (!context.TryGetModule(typeof(Hpricot), out hpricotModule)) {
+                RubyExceptions.CreateNameError("Cannot find module Hpricot");
+            }
+            
+            Object bufferSize;
+            if (hpricotModule.TryGetClassVariable("@@buffer_size", out bufferSize)) {
+                return (int)bufferSize;
+            }
+
+            return DEFAULT_BUFFER_SIZE;
         }
 
         #endregion
@@ -1273,7 +1280,6 @@ namespace IronRuby.Hpricot {
 
             }
             else if (sym_cdata.Equals(sym)) {
-
                 rb_hpricot_add(state.Focus, H_ELE(new Hpricot.CData(state), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_comment.Equals(sym)) {
@@ -1505,7 +1511,7 @@ namespace IronRuby.Hpricot {
                 _state = state;
             }
 
-            buffer_size = BufferSize.HasValue ? BufferSize.Value : DEFAULT_BUFFER_SIZE;
+            buffer_size = GetBufferSize(_context);
             buf = new char[buffer_size];
 
             {
