@@ -16,12 +16,12 @@ namespace IronRuby.Hpricot {
     public class HpricotScanner {
         #region fields - miscellaneous
 
-        private static String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
+        private static readonly String NO_WAY_SERIOUSLY = "*** This should not happen, please send a bug report with the HTML you're parsing to why@whytheluckystiff.net.  So sorry!";
 
         private static Int32? _bufferSize;
         private static readonly RubyRegex _procInsParse = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
 
-        private RubyContext/*!*/ _currentContext;
+        private RubyContext/*!*/ _context;
         private BlockParam/*!*/ _blockParam;
         private ConversionStorage<MutableString> _toMutableString;
         private BinaryOpStorage _readIOStorage;
@@ -977,12 +977,12 @@ namespace IronRuby.Hpricot {
         #region constructors 
 
         public HpricotScanner(ConversionStorage<MutableString>/*!*/ toMutableString, BinaryOpStorage/*!*/ readIOStorage, BlockParam block) {
-            _currentContext = toMutableString.Context;
+            _context = toMutableString.Context;
             _toMutableString = toMutableString;
             _readIOStorage = readIOStorage;
             _blockParam = block;
 
-            InitializeHpricotSymbols(_currentContext);
+            InitializeHpricotSymbols(_context);
         }
 
         private static void InitializeHpricotSymbols(RubyContext context) { 
@@ -1118,10 +1118,10 @@ namespace IronRuby.Hpricot {
             ary.Add(raw);
 
             if (taint) {
-                _currentContext.SetObjectTaint(ary, true);
-                _currentContext.SetObjectTaint(tag, true);
-                _currentContext.SetObjectTaint(attr, true);
-                _currentContext.SetObjectTaint(raw, true);
+                _context.SetObjectTaint(ary, true);
+                _context.SetObjectTaint(tag, true);
+                _context.SetObjectTaint(attr, true);
+                _context.SetObjectTaint(raw, true);
             }
 
             Object result = null;
@@ -1423,7 +1423,7 @@ namespace IronRuby.Hpricot {
         private void ATTR(Object K, Object V) {
             if (K != null) {
                 if (attr == null) {
-                    attr = new Hash(_currentContext);
+                    attr = new Hash(_context);
                 }
                 (attr as Hash)[K] = V;
             }
@@ -1472,15 +1472,15 @@ namespace IronRuby.Hpricot {
             akey = new Object[1];
             aval = new Object[1];
 
-            taint = _currentContext.IsObjectTainted(source);
+            taint = _context.IsObjectTainted(source);
 
-            bool sourceRespondsToRead = _currentContext.RespondTo(source, "read");
+            bool sourceRespondsToRead = _context.RespondTo(source, "read");
 
             RubyIOReadCallSite readIOCallSite = null;
             if (sourceRespondsToRead) {
                 readIOCallSite = _readIOStorage.GetCallSite("read", 1);
             }
-            else if (_currentContext.RespondTo(source, "to_str")) {
+            else if (_context.RespondTo(source, "to_str")) {
                 source = Protocols.CastToString(_toMutableString, source);
             }
             else {
@@ -1488,7 +1488,7 @@ namespace IronRuby.Hpricot {
             }
 
             if (_blockParam == null) {
-                var state = new ScannerState(_currentContext);
+                var state = new ScannerState(_context);
                 state.Doc = new Hpricot.Document(state);
                 state.Focus = state.Doc as IHpricotDataContainer;
                 state.Xml = OPT(options, _optXml);
@@ -1500,7 +1500,7 @@ namespace IronRuby.Hpricot {
 
                 state.EC = elementContent;
 
-                _currentContext.SetInstanceVariable(state.Doc, "@options", options);
+                _context.SetInstanceVariable(state.Doc, "@options", options);
 
                 _state = state;
             }

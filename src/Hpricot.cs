@@ -250,7 +250,7 @@ namespace IronRuby.Hpricot {
 
             protected override MutableString RawString {
                 get {
-                    MutableString doctype = MutableString.CreateAscii("");
+                    MutableString doctype = MutableString.CreateEmpty();
                     doctype.AppendFormat("<!DOCTYPE {0} ", GetTarget(this));
 
                     AttributeData data = _data as AttributeData;
@@ -515,7 +515,7 @@ namespace IronRuby.Hpricot {
 
             protected override MutableString RawString {
                 get {
-                    MutableString xmldecl = MutableString.CreateAscii("");
+                    MutableString xmldecl = MutableString.CreateEmpty();
                     xmldecl.AppendFormat("<?xml version=\"{0}\"", GetVersion(this));
 
                     AttributeData data = _data as AttributeData;
