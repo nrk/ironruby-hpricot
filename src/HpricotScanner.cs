@@ -1054,7 +1054,7 @@ namespace IronRuby.Hpricot {
                 he.EC = ec;
 
                 if (raw > -1 && (sym_emptytag.Equals(sym) || sym_stag.Equals(sym) || sym_etag.Equals(sym) || sym_doctype.Equals(sym))) {
-                    he.Raw = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
+                    he.Raw = Utilities.CreateMutableStringFromBuffer(buf, raw, rawlen);
                 }
             }
             else if (ele is DocumentType || ele is ProcedureInstruction || ele is XmlDeclaration || ele is ETag || ele is BogusETag) {
@@ -1063,7 +1063,7 @@ namespace IronRuby.Hpricot {
                 ha.Tag = tag;
                 if (ele is ETag || ele is BogusETag) {
                     if (raw > -1) {
-                        ha.Attr = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
+                        ha.Attr = Utilities.CreateMutableStringFromBuffer(buf, raw, rawlen);
                     }
                 }
                 else {
@@ -1136,7 +1136,7 @@ namespace IronRuby.Hpricot {
                     (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
                     !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
                     sym = sym_text;
-                    tag = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
+                    tag = Utilities.CreateMutableStringFromBuffer(buf, raw, rawlen);
                 }
 
                 if (ec != null) {
@@ -1317,7 +1317,7 @@ namespace IronRuby.Hpricot {
                 if (_blockParam != null) {
                     MutableString raw_string = null;
                     if (raw > 0) {
-                        raw_string = MutableString.Create(new String(buf, raw, rawlen), RubyEncoding.Binary);
+                        raw_string = Utilities.CreateMutableStringFromBuffer(buf, raw, rawlen);
                     }
                     // NOTE: right before v0.7 the fourth argument of rb_yield_tokens was yielding raw_string 
                     //       but now it yields null (hardcoded). I still have to understand why, but this 
@@ -1337,7 +1337,7 @@ namespace IronRuby.Hpricot {
                     tag[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_tag) {
-                    tag[0] = MutableString.Create(new String(buf, mark_tag, E - mark_tag), RubyEncoding.Binary);
+                    tag[0] = Utilities.CreateMutableStringFromBuffer(buf, mark_tag, E - mark_tag);
                 }
             }
             else if (N == akey) {
@@ -1345,7 +1345,7 @@ namespace IronRuby.Hpricot {
                     akey[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_akey) {
-                    akey[0] = MutableString.Create(new String(buf, mark_akey, E - mark_akey), RubyEncoding.Binary);
+                    akey[0] = Utilities.CreateMutableStringFromBuffer(buf, mark_akey, E - mark_akey);
                 }
             }
             else if (N == aval) {
@@ -1353,7 +1353,7 @@ namespace IronRuby.Hpricot {
                     aval[0] = MutableString.CreateEmpty();
                 }
                 else if (E > mark_aval) {
-                    aval[0] = MutableString.Create(new String(buf, mark_aval, E - mark_aval), RubyEncoding.Binary);
+                    aval[0] = Utilities.CreateMutableStringFromBuffer(buf, mark_aval, E - mark_aval);
                 }
             }
         }

@@ -84,6 +84,7 @@
     <Compile Include="ScannerState.cs" />
     <Compile Include="Initializers.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ragel\HpricotScanner.common.rl" />
