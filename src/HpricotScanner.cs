@@ -1171,7 +1171,7 @@ namespace IronRuby.Hpricot {
             }
 
             if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym)) { 
-                var ele = H_ELE(new Hpricot.Element(), state, sym, tag, attr, ec, raw, rawlen);
+                var ele = H_ELE(new Hpricot.Element(state), state, sym, tag, attr, ec, raw, rawlen);
                 var he = ele.GetData<ElementData>();
                 he.Name = tag.GetHashCode();
 
@@ -1259,10 +1259,10 @@ namespace IronRuby.Hpricot {
                 }
 
                 if (match == null) {
-                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.BogusETag(), state, sym, tag, attr, ec, raw, rawlen));
+                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.BogusETag(state), state, sym, tag, attr, ec, raw, rawlen));
                 }
                 else {
-                    var ele = H_ELE(new Hpricot.ETag(), state, sym, tag, attr, ec, raw, rawlen);
+                    var ele = H_ELE(new Hpricot.ETag(state), state, sym, tag, attr, ec, raw, rawlen);
                     Debug.Assert(match is IHpricotDataContainer, "match is not an instance of IHpricotDataContainer");
                     ElementData he = (match as Hpricot.Element).GetData<ElementData>();
 
@@ -1277,10 +1277,10 @@ namespace IronRuby.Hpricot {
             }
             else if (sym_cdata.Equals(sym)) {
 
-                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.CData(), state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.CData(state), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_comment.Equals(sym)) {
-                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Comment(), state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Comment(state), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_doctype.Equals(sym)) {
                 if (state.Strict) {
@@ -1289,7 +1289,7 @@ namespace IronRuby.Hpricot {
                     (attr as Hash).Add(SymbolTable.StringToId("system_id"), MutableString.CreateAscii("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"));
                     (attr as Hash).Add(SymbolTable.StringToId("public_id"), MutableString.CreateAscii("-//W3C//DTD XHTML 1.0 Strict//EN"));
                 }
-                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.DocumentType(), state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.DocumentType(state), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_procins.Equals(sym)) {
                 Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
@@ -1299,7 +1299,7 @@ namespace IronRuby.Hpricot {
 
                 tag = match.GetGroupValue(1);
                 attr = match.GetGroupValue(2);
-                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.ProcedureInstruction(), state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.ProcedureInstruction(state), state, sym, tag, attr, ec, raw, rawlen));
             }
             else if (sym_text.Equals(sym)) {
                 // TODO: add raw_string as well?
@@ -1312,11 +1312,11 @@ namespace IronRuby.Hpricot {
                     (he.Tag as MutableString).Append(tag as MutableString);
                 }
                 else {
-                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Text(), state, sym, tag, attr, ec, raw, rawlen));
+                    rb_hpricot_add(state.Focus, H_ELE(new Hpricot.Text(state), state, sym, tag, attr, ec, raw, rawlen));
                 }
             }
             else if (sym_xmldecl.Equals(sym)) {
-                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.XmlDeclaration(), state, sym, tag, attr, ec, raw, rawlen));
+                rb_hpricot_add(state.Focus, H_ELE(new Hpricot.XmlDeclaration(state), state, sym, tag, attr, ec, raw, rawlen));
             }
         }
 
@@ -1491,9 +1491,8 @@ namespace IronRuby.Hpricot {
             }
 
             if (_blockParam == null) {
-                ScannerState state = new ScannerState(_currentContext);
-                Hpricot.Document doc = new Hpricot.Document();
-                state.Doc = doc;
+                var state = new ScannerState(_currentContext);
+                state.Doc = new Hpricot.Document(state);
                 state.Focus = state.Doc as IHpricotDataContainer;
                 state.Xml = OPT(options, _optXml);
                 state.Strict = OPT(options, _optXhtmlStrict);

@@ -63,11 +63,19 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("Doc")]
         public class Document : IHpricotDataContainer {
+            private RubyContext _context;
             private ElementData _data;
 
-            public Document() : this(new ElementData()) { }
+            public Document(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public Document(ElementData data) {
+            public Document(RubyContext context) 
+                : this(context, new ElementData()) { 
+            }
+
+            public Document(RubyContext context, ElementData data) {
+                _context = context;
                 _data = data;
             }
 
@@ -77,7 +85,7 @@ namespace IronRuby.Hpricot {
 
             [RubyConstructor]
             public static Document Allocator(RubyClass/*!*/ self) {
-                return new Document();
+                return new Document(self.Context);
             }
 
             [RubyMethod("children")]
@@ -97,7 +105,25 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("BaseEle")]
         public abstract class BaseElement : IHpricotDataContainer {
+            protected RubyContext _context;
             protected BasicData _data;
+
+            public BaseElement(ScannerState state) 
+                : this(state.Context, new BasicData()) { 
+            }
+
+            public BaseElement(ScannerState state, BasicData data)
+                : this(state.Context, data) {
+            }
+
+            public BaseElement(RubyContext context) 
+                : this(context, new BasicData()) {
+            }
+
+            public BaseElement(RubyContext context, BasicData data) {
+                _context = context;
+                _data = data;
+            }
 
             public T GetData<T>() where T : BasicData {
                 return _data as T;
@@ -131,15 +157,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("CData", Inherits = typeof(BaseElement))]
         public class CData : BaseElement {
-            public CData() : this(new BasicData()) { }
+            public CData(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public CData(BasicData data) {
-                _data = data;
+            public CData(RubyContext context)
+                : base(context) {
             }
 
             [RubyConstructor]
             public static CData Allocator(RubyClass/*!*/ self) {
-                return new CData();
+                return new CData(self.Context);
             }
 
             protected override MutableString RawString {
@@ -165,15 +193,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("Comment", Inherits = typeof(BaseElement))]
         public class Comment : BaseElement {
-            public Comment() : this(new BasicData()) { }
+            public Comment(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public Comment(BasicData data) {
-                _data = data;
+            public Comment(RubyContext context)
+                : base(context) {
             }
 
             [RubyConstructor]
             public static Comment Allocator(RubyClass/*!*/ self) {
-                return new Comment();
+                return new Comment(self.Context);
             }
 
             protected override MutableString RawString {
@@ -202,15 +232,17 @@ namespace IronRuby.Hpricot {
             private static readonly SymbolId _systemId = SymbolTable.StringToId("system_id");
             private static readonly SymbolId _publicId = SymbolTable.StringToId("public_id");
 
-            public DocumentType() : this(new AttributeData()) { }
-
-            public DocumentType(AttributeData data) {
-                _data = data;
+            public DocumentType(ScannerState state) 
+                : this(state.Context) { 
             }
-            
+
+            public DocumentType(RubyContext context)
+                : base(context, new AttributeData()) {
+            }
+
             [RubyConstructor]
             public static DocumentType Allocator(RubyClass/*!*/ self) {
-                return new DocumentType();
+                return new DocumentType(self.Context);
             }
 
             protected override MutableString RawString {
@@ -293,15 +325,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("Elem", Inherits = typeof(BaseElement))]
         public class Element : BaseElement {
-            public Element() : this(new ElementData()) { }
+            public Element(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public Element(ElementData data) {
-                _data = data;
+            public Element(RubyContext context)
+                : base(context, new ElementData()) {
             }
 
             [RubyConstructor]
             public static Element Allocator(RubyClass/*!*/ self) {
-                return new Element();
+                return new Element(self.Context);
             }
 
             [RubyMethod("raw_string")]
@@ -362,15 +396,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("ETag", Inherits = typeof(BaseElement))]
         public class ETag : BaseElement {
-            public ETag() : this(new AttributeData()) { }
+            public ETag(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public ETag(AttributeData data) {
-                _data = data;
+            public ETag(RubyContext context)
+                : base(context, new AttributeData()) {
             }
 
             [RubyConstructor]
             public static ETag Allocator(RubyClass/*!*/ self) {
-                return new ETag();
+                return new ETag(self.Context);
             }
 
             [RubyMethod("raw_string")]
@@ -403,9 +439,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("BogusETag", Inherits = typeof(ETag))]
         public class BogusETag : ETag {
+            public BogusETag(ScannerState state) 
+                : this(state.Context) { 
+            }
+
+            public BogusETag(RubyContext context)
+                : base(context) {
+            }
+
             [RubyConstructor]
             public static new BogusETag Allocator(RubyClass/*!*/ self) {
-                return new BogusETag();
+                return new BogusETag(self.Context);
             }
         }
 
@@ -414,16 +458,18 @@ namespace IronRuby.Hpricot {
         #region Hpricot::Text
 
         [RubyClass("Text", Inherits = typeof(BaseElement))]
-        public class Text : BaseElement { 
-            public Text() : this(new BasicData()) { }
+        public class Text : BaseElement {
+            public Text(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public Text(BasicData data) {
-                _data = data;
+            public Text(RubyContext context)
+                : base(context) {
             }
 
             [RubyConstructor]
             public static Text Allocator(RubyClass/*!*/ self) {
-                return new Text();
+                return new Text(self.Context);
             }
 
             [RubyMethod("content")]
@@ -447,15 +493,17 @@ namespace IronRuby.Hpricot {
             private static readonly SymbolId _standalone = SymbolTable.StringToId("standalone");
             private static readonly SymbolId _version = SymbolTable.StringToId("version");
 
-            public XmlDeclaration() : this(new AttributeData()) { }
+            public XmlDeclaration(ScannerState state) 
+                : this(state.Context) { 
+            }
 
-            public XmlDeclaration(AttributeData data) {
-                _data = data;
+            public XmlDeclaration(RubyContext context)
+                : base(context, new AttributeData()) {
             }
 
             [RubyConstructor]
             public static XmlDeclaration Allocator(RubyClass/*!*/ self) {
-                return new XmlDeclaration();
+                return new XmlDeclaration(self.Context);
             }
 
             protected override MutableString RawString {
@@ -551,15 +599,17 @@ namespace IronRuby.Hpricot {
 
         [RubyClass("ProcIns", Inherits = typeof(BaseElement))]
         public class ProcedureInstruction : BaseElement {
-            public ProcedureInstruction() : this(new AttributeData()) { }
-
-            public ProcedureInstruction(AttributeData data) {
-                _data = data;
+            public ProcedureInstruction(ScannerState state) 
+                : this(state.Context) { 
             }
 
+            public ProcedureInstruction(RubyContext context)
+                : base(context, new AttributeData()) {
+            }
+            
             [RubyConstructor]
             public static ProcedureInstruction Allocator(RubyClass/*!*/ self) {
-                return new ProcedureInstruction();
+                return new ProcedureInstruction(self.Context);
             }
 
             protected override MutableString RawString {
