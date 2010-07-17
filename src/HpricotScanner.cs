@@ -1005,20 +1005,6 @@ namespace IronRuby.Hpricot {
             get { return _procInsParse; }
         }
         
-        private static int GetBufferSize(RubyContext context) {
-            RubyModule hpricotModule;
-            if (!context.TryGetModule(typeof(Hpricot), out hpricotModule)) {
-                RubyExceptions.CreateNameError("Cannot find module Hpricot");
-            }
-
-            Object bufferSize;
-            if (hpricotModule.TryGetClassVariable("@@buffer_size", out bufferSize)) {
-                return (int)bufferSize;
-            }
-
-            return DEFAULT_BUFFER_SIZE;
-        }
-
         private static Object rb_hash_lookup(Hash hash, Object key) {
             Object value;
             return hash.TryGetValue(key, out value) ? value : null;
@@ -1482,7 +1468,8 @@ namespace IronRuby.Hpricot {
                 _state = state;
             }
 
-            buffer_size = GetBufferSize(_context);
+            Int32? rubyBufferSize = Utilities.GetBufferSize(_context);
+            buffer_size = rubyBufferSize.HasValue ? rubyBufferSize.Value : DEFAULT_BUFFER_SIZE;
             buf = new char[buffer_size];
 
             {

@@ -30,16 +30,12 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("buffer_size", RubyMethodAttributes.PublicSingleton)]
         public static Int32? GetBufferSize(RubyModule/*!*/ self) {
-            Object bufferSize;
-            if (self.TryGetClassVariable("@@buffer_size", out bufferSize)) {
-                return (int) bufferSize;
-            }
-            return null;
+            return Utilities.GetBufferSize(self);
         }
 
         [RubyMethod("buffer_size=", RubyMethodAttributes.PublicSingleton)]
         public static void SetBufferSize(RubyModule/*!*/ self, Int32 bufferSize) {
-            self.SetClassVariable("@@buffer_size", bufferSize);
+            Utilities.SetBufferSize(self, bufferSize);
         }
     }
 }
