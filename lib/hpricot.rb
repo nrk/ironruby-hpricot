@@ -17,7 +17,7 @@ begin
 rescue LoadError
 end
 
-load_assembly 'IronRuby.Libraries.Hpricot', 'IronRuby.Libraries.Hpricot'
+load_assembly 'IronRuby.Hpricot', 'IronRuby.Hpricot'
 
 require 'hpricot/tag'
 require 'hpricot/modules'

@@ -10,7 +10,7 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Utils;
 using Microsoft.Scripting.Runtime;
 
-namespace IronRuby.Libraries.Hpricot {
+namespace IronRuby.Hpricot {
     using RubyIOReadCallSite = CallSite<Func<CallSite, Object, Object, Object>>;
 
     public class HpricotScanner {

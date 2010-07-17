@@ -1,7 +1,7 @@
 ﻿using System;
 using IronRuby.Builtins;
 
-namespace IronRuby.Libraries.Hpricot {
+namespace IronRuby.Hpricot {
     public class ScannerState {
         #region fields
 

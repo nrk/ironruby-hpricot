@@ -6,7 +6,7 @@ using IronRuby.Runtime;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
-namespace IronRuby.Libraries.Hpricot {
+namespace IronRuby.Hpricot {
 
     #region IHpricotDataContainer
 

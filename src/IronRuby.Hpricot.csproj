@@ -8,8 +8,8 @@
     <ProjectGuid>{26AA0639-87CD-47F2-95C3-83F851464531}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronRuby.Libraries.Hpricot</RootNamespace>
-    <AssemblyName>IronRuby.Libraries.Hpricot</AssemblyName>
+    <RootNamespace>IronRuby.Hpricot</RootNamespace>
+    <AssemblyName>IronRuby.Hpricot</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
