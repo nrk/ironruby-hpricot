@@ -112,8 +112,8 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "content=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.CData, System.Object>(IronRuby.Hpricot.CData.SetContent)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.CData, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.CData.SetContent)
             );
             
         }
@@ -125,8 +125,8 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "content=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.Comment, System.Object>(IronRuby.Hpricot.Comment.SetContent)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.Comment, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.Comment.SetContent)
             );
             
         }
@@ -166,13 +166,13 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "target", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.DocumentType, System.Object>(IronRuby.Hpricot.DocumentType.GetTarget)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.DocumentType, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.DocumentType.GetTarget)
             );
             
             DefineLibraryMethod(module, "target=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.DocumentType, System.Object>(IronRuby.Hpricot.DocumentType.SetTarget)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.DocumentType, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.DocumentType.SetTarget)
             );
             
         }
@@ -204,13 +204,13 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "name", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.GetName)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.Element, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.Element.GetName)
             );
             
             DefineLibraryMethod(module, "name=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.SetName)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.Element, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.Element.SetName)
             );
             
             DefineLibraryMethod(module, "raw_attributes", 0x11, 
@@ -237,13 +237,13 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "name", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.ETag, System.Object>(IronRuby.Hpricot.ETag.GetName)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.ETag, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.ETag.GetName)
             );
             
             DefineLibraryMethod(module, "name=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.ETag, System.Object>(IronRuby.Hpricot.ETag.SetName)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.ETag, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.ETag.SetName)
             );
             
             DefineLibraryMethod(module, "raw_string", 0x11, 
@@ -265,13 +265,13 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "target", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.ProcedureInstruction, System.Object>(IronRuby.Hpricot.ProcedureInstruction.GetTarget)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.ProcedureInstruction, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.ProcedureInstruction.GetTarget)
             );
             
             DefineLibraryMethod(module, "target=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.ProcedureInstruction, System.Object>(IronRuby.Hpricot.ProcedureInstruction.SetTarget)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.ProcedureInstruction, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.ProcedureInstruction.SetTarget)
             );
             
         }
@@ -284,7 +284,7 @@ namespace IronRuby.Hpricot {
             
             DefineLibraryMethod(module, "content=", 0x11, 
                 0x00000000U, 
-                new Action<IronRuby.Hpricot.Text, System.Object>(IronRuby.Hpricot.Text.SetContent)
+                new Action<IronRuby.Hpricot.Text, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.Text.SetContent)
             );
             
         }

@@ -3,10 +3,10 @@ using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
     public class BasicData {
-        private Object _tag;
+        private MutableString _tag;
         private IHpricotDataContainer _parent;
 
-        public Object Tag { 
+        public MutableString Tag { 
             get { return _tag; } 
             set { _tag = value; }
         }

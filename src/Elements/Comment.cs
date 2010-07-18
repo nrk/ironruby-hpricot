@@ -29,11 +29,11 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("content")]
         public static MutableString GetContent(Comment/*!*/ self) {
-            return self._data.Tag as MutableString;
+            return self._data.Tag;
         }
 
         [RubyMethod("content=")]
-        public static void SetContent(Comment/*!*/ self, Object/*!*/ content) {
+        public static void SetContent(Comment/*!*/ self, MutableString/*!*/ content) {
             self._data.Tag = content;
         }
     }

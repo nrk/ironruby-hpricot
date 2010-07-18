@@ -39,12 +39,12 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("target")]
-        public static Object GetTarget(ProcedureInstruction/*!*/ self) {
+        public static MutableString GetTarget(ProcedureInstruction/*!*/ self) {
             return self._data.Tag;
         }
 
         [RubyMethod("target=")]
-        public static void SetTarget(ProcedureInstruction/*!*/ self, Object/*!*/ target) {
+        public static void SetTarget(ProcedureInstruction/*!*/ self, MutableString/*!*/ target) {
             self._data.Tag = target;
         }
     }

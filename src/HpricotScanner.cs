@@ -1025,7 +1025,7 @@ namespace IronRuby.Hpricot {
             }
         }
 
-        private IHpricotDataContainer H_ELE(IHpricotDataContainer ele, ScannerState state, Object sym, Object tag, Object attr, Object ec, Int32 raw, Int32 rawlen) {
+        private IHpricotDataContainer H_ELE(IHpricotDataContainer ele, ScannerState state, RubySymbol sym, MutableString tag, Object attr, Object ec, Int32 raw, Int32 rawlen) {
             if (ele is Element) {
                 ElementData he = ele.GetData<ElementData>();
 
@@ -1092,7 +1092,7 @@ namespace IronRuby.Hpricot {
             _blockParam.Yield(ary, out result);
         }
 
-        private void rb_hpricot_token(ScannerState state, Object sym, Object tag, Object attr, int raw, int rawlen, bool taint) { 
+        private void rb_hpricot_token(ScannerState state, RubySymbol sym, MutableString tag, Object attr, int raw, int rawlen, bool taint) { 
             Object ec = null;
 
             if (!state.Xml) {
@@ -1297,7 +1297,7 @@ namespace IronRuby.Hpricot {
                     rb_yield_tokens(N, tag[0], attr, null, taint);
                 }
                 else {
-                    rb_hpricot_token(_state, N, tag[0], attr, raw, rawlen, taint);
+                    rb_hpricot_token(_state, N, (MutableString)tag[0], attr, raw, rawlen, taint);
                 }
             }
         }

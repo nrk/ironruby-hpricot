@@ -36,12 +36,12 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("name")]
-        public static Object GetName(ETag/*!*/ self) {
+        public static MutableString GetName(ETag/*!*/ self) {
             return self._data.Tag;
         }
 
         [RubyMethod("name=")]
-        public static void SetName(ETag/*!*/ self, Object/*!*/ name) {
+        public static void SetName(ETag/*!*/ self, MutableString/*!*/ name) {
             self._data.Tag = name;
         }
     }
