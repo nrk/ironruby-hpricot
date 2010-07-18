@@ -224,8 +224,8 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "raw_string", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.GetRawString)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.Element, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.Element.GetRawString)
             );
             
         }
@@ -260,8 +260,8 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "content=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.ProcedureInstruction, System.Object>(IronRuby.Hpricot.ProcedureInstruction.SetContent)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.ProcedureInstruction, IronRuby.Builtins.MutableString>(IronRuby.Hpricot.ProcedureInstruction.SetContent)
             );
             
             DefineLibraryMethod(module, "target", 0x11, 

@@ -23,7 +23,7 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("raw_string")]
-        public static Object GetRawString(Element/*!*/ self) {
+        public static MutableString GetRawString(Element/*!*/ self) {
             return self.GetData<ElementData>().Raw;
         }
 
