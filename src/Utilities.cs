@@ -10,7 +10,7 @@ namespace IronRuby.Hpricot {
         public static readonly RubyRegex ProcessInstructionParser = new RubyRegex(MutableString.CreateAscii(@"\A<\?(\S+)\s+(.+)"), RubyRegexOptions.Multiline);
 
         public static MutableString CreateMutableStringFromBuffer(char[] buffer, int raw, int rawlen) { 
-            return MutableString.Create(new String(buffer, raw, rawlen), RubyEncoding.Binary);
+            return MutableString.CreateMutable(rawlen, RubyEncoding.Binary).Append(buffer, raw, rawlen);
         }
 
         public static RubyModule GetHpricotModule(RubyContext context) {
