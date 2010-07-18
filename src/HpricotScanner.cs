@@ -1138,7 +1138,7 @@ namespace IronRuby.Hpricot {
                 he.Name = tag.GetHashCode();
 
                 if (!state.Xml) {
-                    Object match = null;
+                    IHpricotDataContainer match = null;
                     IHpricotDataContainer e = state.Focus;
 
                     while (e != state.Doc) {
@@ -1168,7 +1168,7 @@ namespace IronRuby.Hpricot {
                         match = state.Focus;
                     }
 
-                    state.Focus = match as IHpricotDataContainer;
+                    state.Focus = match;
                 }
 
                 rb_hpricot_add(state.Focus, ele);
@@ -1187,8 +1187,8 @@ namespace IronRuby.Hpricot {
             }
             else if (sym_etag.Equals(sym)) {
                 int name;
-                Object match = null;
-                var e = state.Focus;
+                IHpricotDataContainer match = null;
+                IHpricotDataContainer e = state.Focus;
 
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
@@ -1219,8 +1219,7 @@ namespace IronRuby.Hpricot {
                 }
                 else {
                     var ele = H_ELE(new ETag(state), state, sym, tag, attr, ec, raw, rawlen);
-                    Debug.Assert(match is IHpricotDataContainer, "match is not an instance of IHpricotDataContainer");
-                    ElementData he = (match as Element).GetData<ElementData>();
+                    ElementData he = match.GetData<ElementData>();
 
                     // TODO: couldn't find this in the original implementation but it still sounds right.
                     he.ETag = ele;
@@ -1274,7 +1273,7 @@ namespace IronRuby.Hpricot {
             }
         }
 
-        private void ELE(Object N) {
+        private void ELE(RubySymbol N) {
             if (te > ts || text) {
                 int raw = -1;
                 int rawlen = 0;
@@ -1411,12 +1410,12 @@ namespace IronRuby.Hpricot {
             }
         }
 
-        private void EBLK(Object N, int T) {
+        private void EBLK(RubySymbol N, int T) {
             CAT(tag, p - T + 1);
             ELE(N);
         }
         
-        public Object Scan(Object/*!*/ source, Hash/*!*/ options, Hash/*!*/ elementContent) {
+        public IHpricotDataContainer Scan(Object/*!*/ source, Hash/*!*/ options, Hash/*!*/ elementContent) {
             tag = new Object[1];
             akey = new Object[1];
             aval = new Object[1];
@@ -1791,7 +1790,7 @@ namespace IronRuby.Hpricot {
                 return _state.Doc;
             }
 
-            return 0;
+            return null;
         }
     }
 }
