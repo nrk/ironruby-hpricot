@@ -5,7 +5,7 @@ using IronRuby.Builtins;
 namespace IronRuby.Hpricot {
     public class ElementData : AttributeData {
         private IList<Object> _children;
-        private Object _etag;
+        private IHpricotDataContainer _etag;
         private MutableString _raw;
         private Object _ec;
         private Int32 _name;
@@ -15,7 +15,7 @@ namespace IronRuby.Hpricot {
             set { _children = value; }
         }
 
-        public Object ETag {
+        public IHpricotDataContainer ETag {
             get { return _etag; }
             set { _etag = value; }
         }

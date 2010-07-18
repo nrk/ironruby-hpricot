@@ -54,12 +54,12 @@ namespace IronRuby.Hpricot {
         }
 
         [RubyMethod("etag")]
-        public static Object GetEtag(Element/*!*/ self) {
+        public static IHpricotDataContainer GetEtag(Element/*!*/ self) {
             return (self._data as ElementData).ETag;
         }
 
         [RubyMethod("etag=")]
-        public static void SetEtag(Element/*!*/ self, Object/*!*/ etag) {
+        public static void SetEtag(Element/*!*/ self, IHpricotDataContainer/*!*/ etag) {
             (self._data as ElementData).ETag = etag;
         }
 

@@ -194,13 +194,13 @@ namespace IronRuby.Hpricot {
             );
             
             DefineLibraryMethod(module, "etag", 0x11, 
-                0x00000000U, 
-                new Func<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.GetEtag)
+                0x00000000U,
+                new Func<IronRuby.Hpricot.Element, IronRuby.Hpricot.IHpricotDataContainer>(IronRuby.Hpricot.Element.GetEtag)
             );
             
             DefineLibraryMethod(module, "etag=", 0x11, 
-                0x00000000U, 
-                new Action<IronRuby.Hpricot.Element, System.Object>(IronRuby.Hpricot.Element.SetEtag)
+                0x00000000U,
+                new Action<IronRuby.Hpricot.Element, IronRuby.Hpricot.IHpricotDataContainer>(IronRuby.Hpricot.Element.SetEtag)
             );
             
             DefineLibraryMethod(module, "name", 0x11, 
