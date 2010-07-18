@@ -1052,8 +1052,7 @@ namespace IronRuby.Hpricot {
                 }
             }
             else {
-                BasicData hb = ele.GetData<BasicData>();
-                hb.Tag = tag;
+                ele.GetData<BasicData>().Tag = tag;
             }
 
             state.Last = ele;
@@ -1062,15 +1061,13 @@ namespace IronRuby.Hpricot {
 
         private static void rb_hpricot_add(IHpricotDataContainer focus, IHpricotDataContainer ele) {
             ElementData he = focus.GetData<ElementData>();
-            BasicData he2 = ele.GetData<BasicData>();
-
-            RubyArray children = he.Children as RubyArray;
+            var children = he.Children;
             if (children == null) {
                 children = new RubyArray(1);
                 he.Children = children;
             }
             children.Add(ele);
-            he2.Parent = focus;
+            ele.GetData<BasicData>().Parent = focus;
         }
 
         private void rb_yield_tokens(Object sym, Object tag, Object attr, Object raw, bool taint) {
@@ -1078,7 +1075,7 @@ namespace IronRuby.Hpricot {
                 raw = tag;
             }
 
-            RubyArray ary = new RubyArray(4);
+            var ary = new RubyArray(4);
             ary.Add(sym);
             ary.Add(tag);
             ary.Add(attr);
@@ -1107,15 +1104,16 @@ namespace IronRuby.Hpricot {
                         ec = rb_hash_lookup(state.EC, tag);
                     }
                     else {
-                        tag = IronRuby.Builtins.MutableStringOps.DownCase(tag as MutableString);
+                        tag = MutableStringOps.DownCase(tag as MutableString);
                         ec = rb_hash_aref(state.EC, tag);
                     }
                 }
 
                 // TODO: tag.GetHashCode() == last.name.GetHashCode() ??
                 if (sym_CDATA.Equals(last.EC) && 
-                    (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
-                    !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
+                        (!sym_procins.Equals(sym) && !sym_comment.Equals(sym) && !sym_cdata.Equals(sym) && !sym_text.Equals(sym)) && 
+                        !(sym_etag.Equals(sym) && tag.GetHashCode() == last.Name.GetHashCode())) {
+
                     sym = sym_text;
                     tag = Utilities.CreateMutableStringFromBuffer(buf, raw, rawlen);
                 }
@@ -1136,7 +1134,7 @@ namespace IronRuby.Hpricot {
 
             if (sym_emptytag.Equals(sym) || sym_stag.Equals(sym)) { 
                 var ele = H_ELE(new Element(state), state, sym, tag, attr, ec, raw, rawlen);
-                var he = ele.GetData<ElementData>();
+                ElementData he = ele.GetData<ElementData>();
                 he.Name = tag.GetHashCode();
 
                 if (!state.Xml) {
@@ -1182,7 +1180,7 @@ namespace IronRuby.Hpricot {
                 //
                 if (sym_stag.Equals(sym)) {
                     if (state.Xml || !sym_EMPTY.Equals(ec)) {
-                        state.Focus = ele as IHpricotDataContainer;
+                        state.Focus = ele;
                         state.Last = null;
                     }
                 }
@@ -1190,10 +1188,8 @@ namespace IronRuby.Hpricot {
             else if (sym_etag.Equals(sym)) {
                 int name;
                 Object match = null;
-                // TODO: need to check if state.Focus is always an Hpricot.Element, but 
-                //       using IHpricotDataContainer might be safer anyway.
-                //Hpricot.Element e = state.Focus as Hpricot.Element;
-                IHpricotDataContainer e = state.Focus as IHpricotDataContainer;
+                var e = state.Focus;
+
                 if (state.Strict) {
                     Debug.Assert(state.EC is Hash, "state.EC is not an instance of Hash");
                     if (!state.EC.ContainsKey(tag)) {
@@ -1262,7 +1258,7 @@ namespace IronRuby.Hpricot {
             else if (sym_text.Equals(sym)) {
                 // TODO: add raw_string as well?
                 if (state.Last != null && state.Last is Text) {
-                    BasicData he = (state.Last as IHpricotDataContainer).GetData<BasicData>();
+                    BasicData he = state.Last.GetData<BasicData>();
 
                     Debug.Assert(tag is MutableString, "tag is not an instance of MutableString");
                     Debug.Assert(he.Tag is MutableString, "he.Tag is not an instance of MutableString");
@@ -1443,18 +1439,12 @@ namespace IronRuby.Hpricot {
             if (_blockParam == null) {
                 var state = new ScannerState(_context);
                 state.Doc = new Document(state);
-                state.Focus = state.Doc as IHpricotDataContainer;
+                state.Focus = state.Doc;
                 state.Xml = OPT(options, _optXml);
                 state.Strict = OPT(options, _optXhtmlStrict);
-                state.Fixup = OPT(options, _optFixupTags);
-                if (state.Strict) {
-                    state.Fixup = true;
-                }
-
+                state.Fixup = state.Strict ? true : OPT(options, _optFixupTags);
                 state.EC = elementContent;
-
                 _context.SetInstanceVariable(state.Doc, "@options", options);
-
                 _state = state;
             }
 
