@@ -30,12 +30,12 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("content")]
         public static MutableString GetContent(ProcedureInstruction/*!*/ self) {
-            return (self._data as AttributeData).Attr as MutableString;
+            return self.GetData<AttributeData>().AttrAsMutableString;
         }
 
         [RubyMethod("content=")]
         public static void SetContent(ProcedureInstruction/*!*/ self, Object/*!*/ content) {
-            (self._data as AttributeData).Attr = content;
+            self.GetData<AttributeData>().Attr = content;
         }
 
         [RubyMethod("target")]

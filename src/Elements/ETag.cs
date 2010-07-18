@@ -24,14 +24,12 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("raw_string")]
         public static MutableString GetRawString(ETag/*!*/ self) {
-            Debug.Assert(self._data is AttributeData, "self._data is not an instance of AttributeData");
-            return (self._data as AttributeData).Attr as MutableString;
+            return self.GetData<AttributeData>().AttrAsMutableString;
         }
 
         [RubyMethod("clear_raw")]
         public static bool ClearRaw(ETag/*!*/ self) {
-            Debug.Assert(self._data is AttributeData, "self._data is not an instance of AttributeData");
-            (self._data as AttributeData).Attr = null;
+            self.GetData<AttributeData>().Attr = null;
             return true;
         }
 

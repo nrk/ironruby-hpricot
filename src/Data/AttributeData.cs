@@ -3,7 +3,6 @@ using IronRuby.Builtins;
 
 namespace IronRuby.Hpricot {
     public class AttributeData : BasicData {
-        // TODO: Hash or MutableString?
         private Object _attr;
 
         public Object Attr {
@@ -11,8 +10,15 @@ namespace IronRuby.Hpricot {
             set { _attr = value; }
         }
 
-        // TODO: this smells, will fix later
-        public bool AttrIsNull {
+        public MutableString AttrAsMutableString {
+            get { return (MutableString)_attr; }
+        }
+
+        public Hash AttrAsHash {
+            get { return (Hash)_attr; }
+        }
+
+        public bool AttrIsEmpty {
             get { return _attr == null; }
         }
     }

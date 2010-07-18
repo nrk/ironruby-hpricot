@@ -24,43 +24,43 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("raw_string")]
         public static Object GetRawString(Element/*!*/ self) {
-            return (self._data as ElementData).Raw;
+            return self.GetData<ElementData>().Raw;
         }
 
         [RubyMethod("clear_raw")]
         public static bool ClearRaw(Element/*!*/ self) {
-            (self._data as ElementData).Raw = null;
+            self.GetData<ElementData>().Raw = null;
             return true;
         }
 
         [RubyMethod("raw_attributes")]
         public static Object GetRawAttributes(Element/*!*/ self) {
-            return (self._data as ElementData).Attr;
+            return self.GetData<ElementData>().Attr;
         }
 
         [RubyMethod("raw_attributes=")]
         public static void SetRawAttributes(Element/*!*/ self, Object/*!*/ rawAttributes) {
-            (self._data as ElementData).Attr = rawAttributes;
+            self.GetData<ElementData>().Attr = rawAttributes;
         }
 
         [RubyMethod("children")]
         public static IList<Object> GetChildren(Element/*!*/ self) {
-            return (self._data as ElementData).Children;
+            return self.GetData<ElementData>().Children;
         }
 
         [RubyMethod("children=")]
         public static void SetChildren(Element/*!*/ self, IList<Object>/*!*/ children) {
-            (self._data as ElementData).Children = children;
+            self.GetData<ElementData>().Children = children;
         }
 
         [RubyMethod("etag")]
         public static IHpricotDataContainer GetEtag(Element/*!*/ self) {
-            return (self._data as ElementData).ETag;
+            return self.GetData<ElementData>().ETag;
         }
 
         [RubyMethod("etag=")]
         public static void SetEtag(Element/*!*/ self, IHpricotDataContainer/*!*/ etag) {
-            (self._data as ElementData).ETag = etag;
+             self.GetData<ElementData>().ETag = etag;
         }
 
         [RubyMethod("name")]

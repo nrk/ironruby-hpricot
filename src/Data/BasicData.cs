@@ -15,5 +15,9 @@ namespace IronRuby.Hpricot {
             get { return _parent; }
             set { _parent = value; }
         }
+
+        public T As<T>() where T : BasicData {
+            return (T)this;
+        }
     }
 }

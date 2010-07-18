@@ -35,8 +35,8 @@ namespace IronRuby.Hpricot {
                 MutableString xmldecl = MutableString.CreateEmpty();
                 xmldecl.AppendFormat("<?xml version=\"{0}\"", GetVersion(this));
 
-                AttributeData data = _data as AttributeData;
-                if (!data.AttrIsNull) {
+                var data = _data.As<AttributeData>();
+                if (!data.AttrIsEmpty) {
                     object encoding = GetEncoding(this);
                     if (encoding != null) {
                         xmldecl.AppendFormat(" encoding=\"{0}\"", encoding);
@@ -55,65 +55,62 @@ namespace IronRuby.Hpricot {
 
         [RubyMethod("encoding")]
         public static Object GetEncoding(XmlDeclaration/*!*/ self) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 return null;
             }
-
             Object value;
-            (data.Attr as Hash).TryGetValue(self._encoding, out value);
+            data.AttrAsHash.TryGetValue(self._encoding, out value);
             return value;
         }
 
         [RubyMethod("encoding=")]
         public static void SetEncoding(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ encoding) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 data.Attr = new Hash(context);
             }
-            (data.Attr as Hash)[self._encoding] = encoding;
+            data.AttrAsHash[self._encoding] = encoding;
         }
 
         [RubyMethod("standalone")]
         public static Object GetStandalone(XmlDeclaration/*!*/ self) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 return null;
             }
-
             Object value;
-            (data.Attr as Hash).TryGetValue(self._standalone, out value);
+            data.AttrAsHash.TryGetValue(self._standalone, out value);
             return value;
         }
 
         [RubyMethod("standalone=")]
         public static void SetStandalone(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ standalone) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 data.Attr = new Hash(context);
             }
-            (data.Attr as Hash)[self._standalone] = standalone;
+            data.AttrAsHash[self._standalone] = standalone;
         }
 
         [RubyMethod("version")]
         public static Object GetVersion(XmlDeclaration/*!*/ self) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 return null;
             }
-
             Object value;
-            (data.Attr as Hash).TryGetValue(self._version, out value);
+            data.AttrAsHash.TryGetValue(self._version, out value);
             return value;
         }
 
         [RubyMethod("version=")]
         public static void SetVersion(RubyContext/*!*/ context, XmlDeclaration/*!*/ self, Object/*!*/ version) {
-            AttributeData data = self._data as AttributeData;
-            if (data.AttrIsNull) {
+            var data = self.GetData<AttributeData>();
+            if (data.AttrIsEmpty) {
                 data.Attr = new Hash(context);
             }
-            (data.Attr as Hash)[self._version] = version;
+            data.AttrAsHash[self._version] = version;
         }
     }
 }

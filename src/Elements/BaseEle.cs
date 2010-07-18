@@ -29,12 +29,12 @@ namespace IronRuby.Hpricot {
         }
 
         public T GetData<T>() where T : BasicData {
-            return _data as T;
+            return _data.As<T>();
         }
 
         protected virtual MutableString RawString {
             get {
-                return _data.Tag != null ? _data.Tag as MutableString : MutableString.CreateEmpty();
+                return _data.Tag != null ? _data.Tag : MutableString.CreateEmpty();
             }
         }
 
