@@ -1,4 +1,6 @@
  * README needs to be populated with notes and building instructions. The code 
    needs the right dose of comments.
 
+ * Update the definition files for Ragel.
+
  * Update to the latest bugfixes from the original Hpricot library.
